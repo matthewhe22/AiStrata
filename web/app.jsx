@@ -18,7 +18,7 @@ const I = {
   check: <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.4"><path d="M4 12.5l5 5L20 7"/></svg>,
 };
 
-const prioColor = { Urgent: "var(--red)", High: "var(--amber)", Medium: "var(--blue)", Low: "var(--muted-2)" };
+const prioColor = { Urgent: "var(--red)", High: "var(--amber)", Medium: "var(--teal)", Low: "var(--muted-2)" };
 const Prio = ({ p }) => <span className="prio" style={{ "--pc": prioColor[p] }} title={p + " priority"}/>;
 const Bands = () => null; // signature moved to the activity ring (see Ring component)
 const Ring = ({ pct, color = "var(--green)", size = 56 }) => (
