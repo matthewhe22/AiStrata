@@ -1,0 +1,22 @@
+{
+  "name": "strataflow-demo",
+  "version": "0.1.0",
+  "description": "StrataFlow demo — AI workflow automation for strata managers",
+  "main": "server/server.js",
+  "scripts": {
+    "build": "esbuild web/app.jsx --bundle --minify --outfile=web/app.js --loader:.jsx=jsx",
+    "start": "node server/server.js",
+    "dev": "npm run build && npm start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1"
+  }
+}
