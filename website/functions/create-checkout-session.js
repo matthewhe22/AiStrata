@@ -10,7 +10,7 @@ const PRICES = {
   growth: process.env.STRIPE_PRICE_GROWTH || 'price_GROWTH_ID'
 };
 
-exports.handler = async (event) => {
+exports.handler = async (event, context) => {
   // CORS
   if (event.httpMethod === 'OPTIONS') {
     return {
@@ -27,8 +27,17 @@ exports.handler = async (event) => {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
+  const user = context.clientContext && context.clientContext.user;
+  if (!user) {
+    return {
+      statusCode: 401,
+      headers: { 'Access-Control-Allow-Origin': '*' },
+      body: JSON.stringify({ error: 'Please sign in first' })
+    };
+  }
+
   try {
-    const { plan, email } = JSON.parse(event.body);
+    const { plan } = JSON.parse(event.body);
     const priceId = PRICES[plan];
 
     if (!priceId) {
@@ -47,8 +56,10 @@ exports.handler = async (event) => {
       'mode': 'subscription',
       'success_url': `${BASE_URL}/success.html`,
       'cancel_url': `${BASE_URL}/cancel.html`,
-      'customer_email': email || '',
-      'metadata[plan]': plan
+      'customer_email': user.email || '',
+      'client_reference_id': user.sub,
+      'metadata[plan]': plan,
+      'metadata[identity_user_id]': user.sub
     });
 
     const response = await fetch(`${STRIPE_API}/checkout/sessions`, {
@@ -73,7 +84,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ sessionId: data.id })
+      body: JSON.stringify({ sessionId: data.id, url: data.url })
     };
 
   } catch (error) {
