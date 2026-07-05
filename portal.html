@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account — StrataFlow</title>
+    <meta name="description" content="Your StrataFlow account dashboard. View your current subscription plan, billing history, and notification settings. Manage your strata automation account.">
+    <link rel="canonical" href="https://strataflow.work/portal">
+    <meta property="og:title" content="My Account — StrataFlow" />
+    <meta property="og:description" content="Your StrataFlow account dashboard. Manage your subscription, billing, and notifications." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://strataflow.work/portal" />
+    <meta property="og:locale" content="en_AU" />
+    <meta property="og:site_name" content="StrataFlow" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="My Account — StrataFlow" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0F172A;
+            color: #fff;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+        .logo span { color: #10B981; }
+        .user-info {
+            text-align: right;
+        }
+        .user-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .user-email {
+            font-size: 0.85rem;
+            color: #94A3B8;
+        }
+        .logout-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
+        .logout-btn:hover { background: rgba(255,255,255,0.1); }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 24px;
+        }
+        .card h2 {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            color: #10B981;
+        }
+        .plan-info {
+            margin-bottom: 16px;
+        }
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .plan-price {
+            font-size: 0.9rem;
+            color: #94A3B8;
+            margin-bottom: 16px;
+        }
+        .plan-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .status-active {
+            background: rgba(16,185,129,0.2);
+            color: #10B981;
+        }
+        .status-cancelled {
+            background: rgba(239,68,68,0.2);
+            color: #EF4444;
+        }
+        .billing-details {
+            margin-top: 16px;
+        }
+        .billing-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.9rem;
+        }
+        .billing-row:last-child { border-bottom: none; }
+        .billing-label { color: #94A3B8; }
+        .billing-value { font-weight: 500; }
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .btn-action {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .btn-upgrade {
+            background: linear-gradient(135deg, #2563EB, #10B981);
+            border: none;
+            color: #fff;
+        }
+        .btn-upgrade:hover { transform: translateY(-2px); }
+        .btn-manage {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        .btn-manage:hover { background: rgba(255,255,255,0.1); }
+        .btn-cancel {
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.3);
+            color: #EF4444;
+        }
+        .btn-cancel:hover { background: rgba(239,68,68,0.2); }
+        .settings-section {
+            margin-top: 24px;
+        }
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .setting-row:last-child { border-bottom: none; }
+        .setting-label {
+            font-weight: 500;
+        }
+        .setting-description {
+            font-size: 0.85rem;
+            color: #94A3B8;
+            margin-top: 4px;
+        }
+        .toggle {
+            width: 48px;
+            height: 24px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .toggle.active {
+            background: #10B981;
+        }
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.2s;
+        }
+        .toggle.active::after {
+            transform: translateX(24px);
+        }
+        .unsubscribe-section {
+            margin-top: 24px;
+            padding: 24px;
+            background: rgba(239,68,68,0.05);
+            border: 1px solid rgba(239,68,68,0.2);
+            border-radius: 16px;
+        }
+        .unsubscribe-section h3 {
+            color: #EF4444;
+            margin-bottom: 12px;
+        }
+        .unsubscribe-section p {
+            font-size: 0.9rem;
+            color: #94A3B8;
+            margin-bottom: 16px;
+        }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Strata<span>Flow</span></div>
+            <div class="user-info">
+                <div class="user-name">John Smith</div>
+                <div class="user-email">john@example.com</div>
+                <button class="logout-btn" onclick="handleLogout()">Sign Out</button>
+            </div>
+        </div>
+        
+        <h1 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 24px;">My Account</h1>
+        
+        <div class="grid">
+            <!-- Subscription Card -->
+            <div class="card">
+                <h2>Current Plan</h2>
+                <div class="plan-info">
+                    <div class="plan-name">Growth Plan</div>
+                    <div class="plan-price">$1,000/month</div>
+                    <span class="plan-status status-active">● Active</span>
+                </div>
+                
+                <div class="billing-details">
+                    <div class="billing-row">
+                        <span class="billing-label">Next Billing Date</span>
+                        <span class="billing-value">August 3, 2025</span>
+                    </div>
+                    <div class="billing-row">
+                        <span class="billing-label">Payment Method</span>
+                        <span class="billing-value">•••• 4242</span>
+                    </div>
+                    <div class="billing-row">
+                        <span class="billing-label">Billing Cycle</span>
+                        <span class="billing-value">Monthly</span>
+                    </div>
+                    <div class="billing-row">
+                        <span class="billing-label">Subscription Since</span>
+                        <span class="billing-value">August 3, 2024</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Actions Card -->
+            <div class="card">
+                <h2>Account Actions</h2>
+                <div class="actions">
+                    <button class="btn-action btn-upgrade" onclick="handleUpgrade()">
+                        ⬆️ Upgrade Plan
+                    </button>
+                    <button class="btn-action btn-manage" onclick="handleManageBilling()">
+                        💳 Manage Payment Method
+                    </button>
+                    <button class="btn-action btn-manage" onclick="handleDownloadInvoice()">
+                        📄 Download Invoice
+                    </button>
+                    <button class="btn-action btn-manage" onclick="handleViewBillingHistory()">
+                        📊 View Billing History
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Unsubscribe Section -->
+        <div class="unsubscribe-section">
+            <h3>⚠️ Cancel Subscription</h3>
+            <p>You can cancel your subscription at any time. You'll retain access until the end of your current billing period. No further charges will be made.</p>
+            <button class="btn-action btn-cancel" onclick="handleCancel()" style="width: 100%;">
+                ❌ Cancel My Subscription
+            </button>
+        </div>
+        
+        <!-- Settings Card -->
+        <div class="card settings-section">
+            <h2>Notification Settings</h2>
+            
+            <div class="setting-row">
+                <div>
+                    <div class="setting-label">Email Notifications</div>
+                    <div class="setting-description">Receive billing and service updates via email</div>
+                </div>
+                <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+            </div>
+            
+            <div class="setting-row">
+                <div>
+                    <div class="setting-label">SMS Notifications</div>
+                    <div class="setting-description">Receive important alerts via SMS</div>
+                </div>
+                <div class="toggle" onclick="this.classList.toggle('active')"></div>
+            </div>
+            
+            <div class="setting-row">
+                <div>
+                    <div class="setting-label">Two-Factor Authentication</div>
+                    <div class="setting-description">Add an extra layer of security to your account</div>
+                </div>
+                <div class="toggle" onclick="this.classList.toggle('active')"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handleLogout() {
+            if (confirm('Are you sure you want to sign out?')) {
+                window.location.href = '/login.html';
+            }
+        }
+        
+        function handleUpgrade() {
+            // In production, redirect to Stripe Checkout for plan upgrade
+            alert('Redirecting to Stripe Checkout for plan upgrade...\n\nIn production, this would:\n1. Create a Stripe Checkout Session\n2. Redirect to Stripe hosted page\n3. Process payment and upgrade subscription');
+            // Example: window.location.href = '/api/checkout?plan=upgrade';
+        }
+        
+        function handleManageBilling() {
+            // In production, redirect to Stripe Customer Portal
+            alert('Redirecting to Stripe Customer Portal...\n\nIn production, this would:\n1. Create a Stripe Customer Portal session\n2. Allow users to update payment methods\n3. View billing history\n4. Change subscription plan\n5. Download invoices');
+            // Example: 
+            // fetch('/api/create-portal-link', { method: 'POST', ... })
+            // .then(res => res.json())
+            // .then(data => window.location.href = data.url);
+        }
+        
+        function handleDownloadInvoice() {
+            alert('Generating invoice PDF...\n\nIn production, this would:\n1. Fetch latest invoice from Stripe API\n2. Generate PDF with billing details\n3. Download to user device');
+        }
+        
+        function handleViewBillingHistory() {
+            alert('Loading billing history...\n\nIn production, this would:\n1. Fetch all invoices from Stripe API\n2. Display payment history table\n3. Allow download of individual invoices');
+        }
+        
+        function handleCancel() {
+            if (confirm('Are you sure you want to cancel your subscription?\n\n• You will lose access to premium features at the end of your billing period\n• No further charges will be made\n• You can reactivate anytime before the cancellation date')) {
+                // In production, call backend API to cancel subscription
+                alert('Cancellation initiated. You will receive a confirmation email shortly.\n\nYour access continues until: August 3, 2025');
+                // Example:
+                // fetch('/api/cancel-subscription', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify({ subscriptionId: 'sub_xxxxx' })
+                // }).then(res => res.json()).then(data => { ... });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Strata Compliance Checklist — StrataFlow</title>
+    <meta name="description" content="Free strata compliance checklist for Australian managers. Download our annual compliance tracker covering NSW, VIC, QLD, WA, SA, ACT, NT regulations — built for strata professionals.">
+    <link rel="canonical" href="https://strataflow.work/checklist">
+    <meta property="og:title" content="Free Strata Compliance Checklist — StrataFlow" />
+    <meta property="og:description" content="Free strata compliance checklist for Australian managers. Annual compliance tracker covering all states." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://strataflow.work/checklist" />
+    <meta property="og:locale" content="en_AU" />
+    <meta property="og:site_name" content="StrataFlow" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Free Strata Compliance Checklist — StrataFlow" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0F172A;
+            color: #fff;
+            line-height: 1.6;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 24px; }
+        .logo { font-size: 1.5rem; font-weight: 800; margin-bottom: 40px; display: block; }
+        .logo span { color: #10B981; }
+        h1 { font-size: 2rem; margin-bottom: 16px; }
+        .subtitle { color: #94A3B8; font-size: 1.1rem; margin-bottom: 40px; }
+        .checklist {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+        .checklist h2 { font-size: 1.3rem; margin-bottom: 24px; color: #10B981; }
+        .checklist-item {
+            display: flex; align-items: flex-start; gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.95rem; color: #CBD5E1;
+        }
+        .checklist-item:last-child { border-bottom: none; }
+        .checklist-item::before {
+            content: '☐';
+            font-size: 1.2rem;
+            color: #2563EB;
+            flex-shrink: 0;
+        }
+        .cta-box {
+            background: linear-gradient(135deg, #2563EB, #10B981);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+        }
+        .cta-box h3 { font-size: 1.3rem; margin-bottom: 12px; }
+        .cta-box p { font-size: 0.95rem; opacity: 0.9; margin-bottom: 20px; }
+        .cta-box a {
+            display: inline-block;
+            background: #fff;
+            color: #0F172A;
+            padding: 14px 32px;
+            border-radius: 10px;
+            font-weight: 700;
+            transition: transform 0.2s;
+        }
+        .cta-box a:hover { transform: translateY(-2px); }
+        .state-tabs {
+            display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;
+        }
+        .state-tab {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .state-tab.active, .state-tab:hover {
+            background: #2563EB;
+            border-color: #2563EB;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="logo">Strata<span>Flow</span></a>
+        
+        <h1>Free Strata Compliance Checklist</h1>
+        <p class="subtitle">Use this checklist to audit your strata scheme's compliance status. Tick each item and identify gaps.</p>
+        
+        <div class="state-tabs">
+            <div class="state-tab active" onclick="switchState('all')">All States</div>
+            <div class="state-tab" onclick="switchState('nsw')">NSW</div>
+            <div class="state-tab" onclick="switchState('vic')">VIC</div>
+            <div class="state-tab" onclick="switchState('qld')">QLD</div>
+            <div class="state-tab" onclick="switchState('wa')">WA</div>
+        </div>
+
+        <div class="checklist" id="checklist">
+            <h2>📋 Annual Compliance Checklist</h2>
+            
+            <div class="checklist-item">Annual General Meeting (AGM) held within required timeframe</div>
+            <div class="checklist-item">Financial statements prepared and adopted at AGM</div>
+            <div class="checklist-item">Annual levy notices issued to all lot owners</div>
+            <div class="checklist-item">Trust account reconciled and audited</div>
+            <div class="checklist-item">Insurance certificates reviewed and current</div>
+            <div class="checklist-item">Building maintenance inspections completed</div>
+            <div class="checklist-item">Fire safety certificate valid and displayed</div>
+            <div class="checklist-item">Lift inspection certificates current (if applicable)</div>
+            <div class="checklist-item">Pool barrier compliance certificate valid (if applicable)</div>
+            <div class="checklist-item">Common property access registers up to date</div>
+            <div class="checklist-item">Committee member contact details current</div>
+            <div class="checklist-item">By-laws registered and enforced</div>
+            <div class="checklist-item">Capital Works/Fund Maintenance Plan current</div>
+            <div class="checklist-item">Strata manager appointment documents filed</div>
+            <div class="checklist-item">Dispute resolution procedures documented</div>
+            <div class="checklist-item">Health & safety policies reviewed</div>
+            <div class="checklist-item">Emergency evacuation plan posted</div>
+            <div class="checklist-item">Building defect register maintained (DLP tracking)</div>
+            <div class="checklist-item">Contractor insurance certificates on file</div>
+            <div class="checklist-item">Owners/Committee communication channels active</div>
+        </div>
+
+        <div class="cta-box">
+            <h3>Found Compliance Gaps?</h3>
+            <p>Book your free 30-minute compliance audit. We'll show you exactly where automation can help.</p>
+            <a href="mailto:hello@strataflows.com.au?subject=Free Compliance Audit Request">Book Free Audit →</a>
+        </div>
+    </div>
+
+    <script>
+        function switchState(state) {
+            document.querySelectorAll('.state-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const items = document.querySelectorAll('.checklist-item');
+            items.forEach(item => item.style.display = 'flex');
+            
+            if (state !== 'all') {
+                // In production, filter by state-specific requirements
+                console.log('Filtering for:', state);
+            }
+        }
+    </script>
+</body>
+</html>

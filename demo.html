@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StrataFlow AI Demo — See Automation in Action</title>
+    <meta name="description" content="See StrataFlow AI automation in action. Watch how strata managers cut admin time by 40%+ with workflow automation, compliance tracking, and committee engagement.">
+    <link rel="canonical" href="https://strataflow.work/demo">
+    <meta property="og:title" content="StrataFlow AI Demo — See Automation in Action" />
+    <meta property="og:description" content="See StrataFlow AI automation in action. Cut admin time by 40%+" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://strataflow.work/demo" />
+    <meta property="og:locale" content="en_AU" />
+    <meta property="og:site_name" content="StrataFlow" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0F172A;
+            color: #fff;
+            min-height: 100vh;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 24px; }
+        .top-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 32px;
+        }
+        .logo { font-size: 1.3rem; font-weight: 800; }
+        .logo span { color: #10B981; }
+        .badge { font-size: 0.75rem; background: rgba(37,99,235,0.2); color: #60A5FA; padding: 4px 12px; border-radius: 100px; }
+        
+        h1 { font-size: 1.8rem; margin-bottom: 8px; }
+        .subtitle { color: #94A3B8; margin-bottom: 32px; }
+        
+        .demo-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+        }
+        
+        .demo-panel {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 24px;
+        }
+        .demo-panel h3 {
+            font-size: 1rem; color: #10B981; margin-bottom: 16px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        
+        /* Chat Interface */
+        .chat-messages {
+            max-height: 400px; overflow-y: auto;
+            padding-right: 8px;
+        }
+        .chat-msg {
+            margin-bottom: 16px;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .chat-msg.user { text-align: right; }
+        .chat-msg.bot { text-align: left; }
+        .chat-bubble {
+            display: inline-block;
+            padding: 12px 16px;
+            border-radius: 12px;
+            max-width: 85%;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .chat-msg.user .chat-bubble {
+            background: #2563EB;
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-msg.bot .chat-bubble {
+            background: rgba(255,255,255,0.08);
+            color: #CBD5E1;
+            border-bottom-left-radius: 4px;
+        }
+        .chat-input-area {
+            display: flex; gap: 8px; margin-top: 16px;
+        }
+        .chat-input {
+            flex: 1; padding: 12px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        .chat-input:focus { border-color: #2563EB; }
+        .chat-send {
+            padding: 12px 20px;
+            background: #2563EB;
+            border: none; border-radius: 10px;
+            color: #fff; font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .chat-send:hover { background: #1D4ED8; }
+        
+        /* Automation Panel */
+        .automation-flow {
+            display: flex; flex-direction: column; gap: 12px;
+        }
+        .flow-step {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            border-left: 3px solid #2563EB;
+            font-size: 0.85rem; color: #CBD5E1;
+        }
+        .flow-step.active { border-left-color: #10B981; background: rgba(16,185,129,0.1); }
+        .flow-step.completed { border-left-color: #10B981; opacity: 0.7; }
+        .flow-icon { font-size: 1.2rem; }
+        .flow-arrow { text-align: center; color: #475569; font-size: 0.8rem; }
+        
+        /* Stats Panel */
+        .stats-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.8rem; font-weight: 900;
+            background: linear-gradient(135deg, #2563EB, #10B981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stat-label { font-size: 0.75rem; color: #94A3B8; margin-top: 4px; }
+        
+        @media (max-width: 768px) {
+            .demo-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-bar">
+            <div class="logo">Strata<span>Flow</span></div>
+            <div class="badge">LIVE DEMO</div>
+        </div>
+        
+        <h1>See StrataFlow Automation in Action</h1>
+        <p class="subtitle">Try the AI chatbot below or watch the workflow automation panel.</p>
+        
+        <div class="demo-grid">
+            <!-- Left: AI Chat -->
+            <div class="demo-panel">
+                <h3>🤖 AI Committee Assistant</h3>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-msg bot">
+                        <div class="chat-bubble">
+                            Hi! I'm your StrataFlow AI assistant. I can help with:<br><br>
+                            🔧 Maintenance requests<br>
+                            📋 Compliance deadlines<br>
+                            💰 Levy information<br>
+                            📅 Meeting schedules<br><br>
+                            Try asking me something!
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Ask about maintenance, compliance, levies..." onkeypress="if(event.key==='Enter')sendMessage()">
+                    <button class="chat-send" onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+            
+            <!-- Right: Automation Flow -->
+            <div class="demo-panel">
+                <h3>⚡ Workflow Automation</h3>
+                <div class="automation-flow" id="autoFlow">
+                    <div class="flow-step" id="step1">
+                        <span class="flow-icon">📨</span>
+                        <div>
+                            <strong>Maintenance Request Received</strong><br>
+                            <span style="color:#94A3B8;font-size:0.8rem;">Via email, app, or web form</span>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step" id="step2">
+                        <span class="flow-icon">🤖</span>
+                        <div>
+                            <strong>AI Classifies & Prioritises</strong><br>
+                            <span style="color:#94A3B8;font-size:0.8rem;">Urgent/Normal/Low + category detection</span>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step" id="step3">
+                        <span class="flow-icon">🔍</span>
+                        <div>
+                            <strong>Checks Compliance & History</strong><br>
+                            <span style="color:#94A3B8;font-size:0.8rem;">Previous issues, warranty status, insurance</span>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step" id="step4">
+                        <span class="flow-icon">👥</span>
+                        <div>
+                            <strong>Routes to Correct Team</strong><br>
+                            <span style="color:#94A3B8;font-size:0.8rem;">Auto-assign contractor + committee notification</span>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step" id="step5">
+                        <span class="flow-icon">✅</span>
+                        <div>
+                            <strong>Resident Gets Update</strong><br>
+                            <span style="color:#94A3B8;font-size:0.8rem;">SMS/email confirmation + ETA</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 24px;">
+                    <h3 style="font-size:1rem; color:#10B981; margin-bottom:16px;">📊 Live Impact</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="timeSaved">4.2h</div>
+                            <div class="stat-label">Hours Saved This Week</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="responseTime">2min</div>
+                            <div class="stat-label">Avg Response Time</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">98%</div>
+                            <div class="stat-label">Compliance Rate</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">40%</div>
+                            <div class="stat-label">Admin Reduction</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Chat responses
+        const responses = {
+            'maintenance': "I've received your maintenance request! 🔧\n\n📋 **Ticket #SF-2847**\n🏢 Building: 73 Church Road, Doncaster\n🔴 Priority: Normal\n⏱️ Estimated response: 2 hours\n\nI've automatically:\n✅ Created a maintenance ticket\n✅ Notified your committee\n✅ Checked warranty status (still under DLP)\n✅ Suggested 2 approved contractors\n\nWould you like to escalate to urgent?",
+            
+            'compliance': "📋 **Compliance Status for 73 Church Rd**\n\n✅ Fire safety certificate — Valid until Dec 2025\n⚠️ Pool barrier inspection — Due in 14 days\n✅ Lift inspection — Current\n✅ Insurance certificates — All valid\n✅ AGM minutes filed\n\n💡 **Tip:** I can set up automated reminders for all upcoming deadlines. Want me to?",
+            
+            'levy': "💰 **Levy Summary — Lot 12**\n\n📊 Quarterly levies: $1,250\n🏗️ Capital works: $400\n🛡️ Insurance: $150\n💵 Total per quarter: $1,800\n\n📅 Next payment due: 15 Oct 2025\n\nI can help set up automatic payments or generate a payment plan. Would you like?",
+            
+            'meeting': "📅 **Next Committee Meeting**\n\n🗓️ Date: 22 October 2025\n🕐 Time: 6:30 PM AEST\n📍 Location: Unit 12, 73 Church Road (hybrid)\n\n📋 Agenda items:\n1. Budget review Q3\n2. Lift replacement proposal\n3. Pool renovation timeline\n\nI can send calendar invites and meeting packs. Want me to?",
+            
+            'default': "Thanks for your message! 🤖\n\nI can help with:\n• 📋 Compliance tracking & deadlines\n• 🔧 Maintenance requests & contractor management\n• 💰 Levy information & payment plans\n• 📅 Meeting scheduling & agendas\n• 🏢 Building information & history\n\nCould you rephrase your question? I'll get you an answer fast!"
+        };
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+            
+            // Add user message
+            addMessage(msg, 'user');
+            input.value = '';
+            
+            // Show typing indicator
+            setTimeout(() => {
+                const typing = document.createElement('div');
+                typing.className = 'chat-msg bot';
+                typing.id = 'typing';
+                typing.innerHTML = '<div class="chat-bubble" style="opacity:0.5;">Typing...</div>';
+                document.getElementById('chatMessages').appendChild(typing);
+                scrollChat();
+                
+                // Remove typing and show response
+                setTimeout(() => {
+                    typing.remove();
+                    const response = getResponse(msg);
+                    addMessage(response, 'bot');
+                }, 800);
+            }, 300);
+        }
+
+        function addMessage(text, sender) {
+            const div = document.createElement('div');
+            div.className = `chat-msg ${sender}`;
+            div.innerHTML = `<div class="chat-bubble">${text.replace(/\n/g, '<br>')}</div>`;
+            document.getElementById('chatMessages').appendChild(div);
+            scrollChat();
+        }
+
+        function scrollChat() {
+            const container = document.getElementById('chatMessages');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function getResponse(msg) {
+            const lower = msg.toLowerCase();
+            if (lower.includes('maintain') || lower.includes('repair') || lower.includes('leak') || lower.includes('broken')) return responses.maintenance;
+            if (lower.includes('compliance') || lower.includes('certificate') || lower.includes('deadline') || lower.includes('inspect')) return responses.compliance;
+            if (lower.includes('levy') || lower.includes('payment') || lower.includes('fee') || lower.includes('cost')) return responses.levy;
+            if (lower.includes('meeting') || lower.includes('committee') || lower.includes('agm')) return responses.meeting;
+            return responses.default;
+        }
+
+        // Animate automation flow
+        let currentStep = 0;
+        const steps = ['step1', 'step2', 'step3', 'step4', 'step5'];
+        
+        function animateFlow() {
+            steps.forEach(s => {
+                document.getElementById(s).className = 'flow-step';
+            });
+            
+            currentStep = (currentStep + 1) % (steps.length + 1);
+            
+            if (currentStep <= steps.length) {
+                for (let i = 0; i < currentStep; i++) {
+                    if (i < currentStep - 1) {
+                        document.getElementById(steps[i]).className = 'flow-step completed';
+                    } else {
+                        document.getElementById(steps[i]).className = 'flow-step active';
+                    }
+                }
+            }
+            
+            setTimeout(animateFlow, 3000);
+        }
+        
+        // Start animation
+        setTimeout(animateFlow, 1000);
+    </script>
+</body>
+</html>

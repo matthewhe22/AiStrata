@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Cancelled — StrataFlow</title>
+    <meta name="description" content="Your StrataFlow payment was cancelled. No charges were made. Ready to try again? Start your free trial anytime.">
+    <link rel="canonical" href="https://strataflow.work/cancel">
+    <meta property="og:title" content="Payment Cancelled — StrataFlow" />
+    <meta property="og:description" content="Your StrataFlow payment was cancelled. No charges made." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://strataflow.work/cancel" />
+    <meta property="og:locale" content="en_AU" />
+    <meta property="og:site_name" content="StrataFlow" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0F172A;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 500px;
+            padding: 40px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            text-align: center;
+        }
+        .cancel-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(239,68,68,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 2.5rem;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            color: #EF4444;
+        }
+        .subtitle {
+            font-size: 1rem;
+            color: #94A3B8;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #2563EB, #10B981);
+            color: #fff;
+            padding: 16px 32px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s;
+            margin-bottom: 12px;
+        }
+        .btn-primary:hover { transform: translateY(-2px); }
+        .btn-secondary {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 16px 32px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+        .back-link {
+            display: block;
+            margin-top: 16px;
+            color: #94A3B8;
+            font-size: 0.9rem;
+        }
+        .back-link:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="cancel-icon">✕</div>
+        <h1>Payment Cancelled</h1>
+        <p class="subtitle">No worries! Your subscription wasn't completed. You can try again or contact us if you need help.</p>
+        
+        <button class="btn-primary" onclick="window.location.href='/'">Try Again</button>
+        <button class="btn-secondary" onclick="window.location.href='/pricing.html'">View Plans</button>
+        <a href="/" class="back-link">← Back to StrataFlow</a>
+    </div>
+</body>
+</html>
