@@ -1509,20 +1509,24 @@
             .catch(() => alert('Could not start checkout. Please try again.'));
     }
 
+    // Stripe Payment Links — update these in Stripe Dashboard → Payment Links
+    const STRIPE_PAYMENT_LINKS = {
+        starter: 'https://buy.stripe.com/test_starter_link',
+        growth: 'https://buy.stripe.com/test_growth_link'
+    };
+
     function handleSubscribe(plan) {
         if (plan === 'enterprise') {
             openContactModal();
             return;
         }
 
-        fetch('/api/auth-me').then((res) => {
-            if (res.ok) {
-                startCheckout(plan);
-            } else {
-                sessionStorage.setItem('sf_pending_plan', plan);
-                window.location.href = '/login.html';
-            }
-        });
+        const link = STRIPE_PAYMENT_LINKS[plan];
+        if (link && link !== 'https://buy.stripe.com/test_starter_link' && link !== 'https://buy.stripe.com/test_growth_link') {
+            window.location.href = link;
+        } else {
+            alert('Payment link not configured yet. Please contact us.');
+        }
     }
 </script>
 
