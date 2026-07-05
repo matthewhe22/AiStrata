@@ -284,31 +284,20 @@
         </div>
     </div>
 
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script>
-        netlifyIdentity.init();
-
-        const user = netlifyIdentity.currentUser();
-        if (!user) {
-            window.location.href = '/login.html';
-        } else {
-            document.getElementById('userName').textContent = user.user_metadata.full_name || user.email;
-            document.getElementById('userEmail').textContent = user.email;
-            loadAccountStatus();
-        }
-
-        function authedFetch(path, options = {}) {
-            return fetch(path, {
-                ...options,
-                headers: {
-                    ...(options.headers || {}),
-                    Authorization: `Bearer ${user.token.access_token}`
-                }
+        fetch('/api/auth-me')
+            .then((res) => (res.ok ? res.json() : Promise.reject()))
+            .then(({ user }) => {
+                document.getElementById('userName').textContent = user.fullName || user.email;
+                document.getElementById('userEmail').textContent = user.email;
+                loadAccountStatus();
+            })
+            .catch(() => {
+                window.location.href = '/login.html';
             });
-        }
 
         function loadAccountStatus() {
-            authedFetch('/api/account-status')
+            fetch('/api/account-status')
                 .then((res) => res.json())
                 .then((data) => {
                     if (!data.hasSubscription) {
@@ -337,13 +326,14 @@
 
         function handleLogout() {
             if (confirm('Are you sure you want to sign out?')) {
-                netlifyIdentity.logout();
-                window.location.href = '/login.html';
+                fetch('/api/auth-logout', { method: 'POST' }).finally(() => {
+                    window.location.href = '/login.html';
+                });
             }
         }
 
         function handleManageBilling() {
-            authedFetch('/api/create-portal-link', { method: 'POST' })
+            fetch('/api/create-portal-link', { method: 'POST' })
                 .then((res) => res.json())
                 .then((data) => {
                     if (data.url) window.location.href = data.url;
@@ -355,7 +345,7 @@
             if (!confirm('Are you sure you want to cancel your subscription?\n\n• You will lose access to premium features at the end of your billing period\n• No further charges will be made')) {
                 return;
             }
-            authedFetch('/api/cancel-subscription', { method: 'POST' })
+            fetch('/api/cancel-subscription', { method: 'POST' })
                 .then((res) => res.json())
                 .then((data) => {
                     if (data.success) {

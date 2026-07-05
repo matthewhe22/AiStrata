@@ -1,0 +1,7 @@
+{
+  "name": "strataflow-website",
+  "private": true,
+  "dependencies": {
+    "@netlify/blobs": "*"
+  }
+}

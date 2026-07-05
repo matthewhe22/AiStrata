@@ -1,15 +1,17 @@
 // Netlify Function: Stripe billing portal session for the signed-in user (REST API, no npm deps)
+const { requireUser } = require('./lib/auth');
+
 const STRIPE_SECRET = process.env.STRIPE_SECRET_KEY;
 const BASE_URL = process.env.BASE_URL || 'https://strataflow.work';
 const STRIPE_API = 'https://api.stripe.com/v1';
 
-exports.handler = async (event, context) => {
+exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') {
-    return { statusCode: 200, headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type, Authorization', 'Access-Control-Allow-Methods': 'POST, OPTIONS' } };
+    return { statusCode: 200, headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Allow-Methods': 'POST, OPTIONS' } };
   }
 
-  const user = context.clientContext && context.clientContext.user;
-  const customerId = user && user.app_metadata && user.app_metadata.stripe_customer_id;
+  const user = await requireUser(event);
+  const customerId = user && user.stripe_customer_id;
   if (!customerId) {
     return { statusCode: 401, headers: { 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify({ error: 'No active subscription' }) };
   }

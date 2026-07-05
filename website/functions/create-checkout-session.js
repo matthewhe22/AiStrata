@@ -1,5 +1,7 @@
 // Netlify Function: create-checkout-session
-// Uses Stripe REST API (no npm deps required)
+// Uses Stripe REST API directly (no stripe npm SDK needed)
+const { requireUser } = require('./lib/auth');
+
 const STRIPE_SECRET = process.env.STRIPE_SECRET_KEY;
 const BASE_URL = process.env.BASE_URL || 'https://strataflow.work';
 const STRIPE_API = 'https://api.stripe.com/v1';
@@ -10,7 +12,7 @@ const PRICES = {
   growth: process.env.STRIPE_PRICE_GROWTH || 'price_GROWTH_ID'
 };
 
-exports.handler = async (event, context) => {
+exports.handler = async (event) => {
   // CORS
   if (event.httpMethod === 'OPTIONS') {
     return {
@@ -27,7 +29,7 @@ exports.handler = async (event, context) => {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
-  const user = context.clientContext && context.clientContext.user;
+  const user = await requireUser(event);
   if (!user) {
     return {
       statusCode: 401,
@@ -57,9 +59,9 @@ exports.handler = async (event, context) => {
       'success_url': `${BASE_URL}/success.html`,
       'cancel_url': `${BASE_URL}/cancel.html`,
       'customer_email': user.email || '',
-      'client_reference_id': user.sub,
+      'client_reference_id': user.id,
       'metadata[plan]': plan,
-      'metadata[identity_user_id]': user.sub
+      'metadata[user_id]': user.id
     });
 
     const response = await fetch(`${STRIPE_API}/checkout/sessions`, {

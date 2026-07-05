@@ -1,14 +1,16 @@
 // Netlify Function: cancels the signed-in user's own Stripe subscription (REST API, no npm deps)
+const { requireUser } = require('./lib/auth');
+
 const STRIPE_SECRET = process.env.STRIPE_SECRET_KEY;
 const STRIPE_API = 'https://api.stripe.com/v1';
 
-exports.handler = async (event, context) => {
+exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') {
-    return { statusCode: 200, headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type, Authorization', 'Access-Control-Allow-Methods': 'POST, OPTIONS' } };
+    return { statusCode: 200, headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Allow-Methods': 'POST, OPTIONS' } };
   }
 
-  const user = context.clientContext && context.clientContext.user;
-  const subscriptionId = user && user.app_metadata && user.app_metadata.stripe_subscription_id;
+  const user = await requireUser(event);
+  const subscriptionId = user && user.stripe_subscription_id;
   if (!subscriptionId) {
     return { statusCode: 401, headers: { 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify({ error: 'No active subscription' }) };
   }
