@@ -1,4 +1,6 @@
 // Netlify Function: returns the signed-in user's live Stripe subscription status
+const { requireUser } = require('./lib/auth');
+
 const STRIPE_SECRET = process.env.STRIPE_SECRET_KEY;
 const STRIPE_API = 'https://api.stripe.com/v1';
 
@@ -9,13 +11,13 @@ async function stripeGet(path) {
   return res.json();
 }
 
-exports.handler = async (event, context) => {
-  const user = context.clientContext && context.clientContext.user;
+exports.handler = async (event) => {
+  const user = await requireUser(event);
   if (!user) {
     return { statusCode: 401, headers: { 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify({ error: 'Not signed in' }) };
   }
 
-  const { stripe_customer_id: customerId, stripe_subscription_id: subscriptionId, plan } = user.app_metadata || {};
+  const { stripe_customer_id: customerId, stripe_subscription_id: subscriptionId, plan } = user;
 
   if (!customerId || !subscriptionId) {
     return {
