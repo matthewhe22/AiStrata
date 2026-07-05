@@ -215,6 +215,7 @@
         @media (max-width: 768px) {
             .grid { grid-template-columns: 1fr; }
         }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
@@ -222,144 +223,148 @@
         <div class="header">
             <div class="logo">Strata<span>Flow</span></div>
             <div class="user-info">
-                <div class="user-name">John Smith</div>
-                <div class="user-email">john@example.com</div>
+                <div class="user-name" id="userName">—</div>
+                <div class="user-email" id="userEmail">—</div>
                 <button class="logout-btn" onclick="handleLogout()">Sign Out</button>
             </div>
         </div>
-        
+
         <h1 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 24px;">My Account</h1>
-        
-        <div class="grid">
-            <!-- Subscription Card -->
-            <div class="card">
-                <h2>Current Plan</h2>
-                <div class="plan-info">
-                    <div class="plan-name">Growth Plan</div>
-                    <div class="plan-price">$1,000/month</div>
-                    <span class="plan-status status-active">● Active</span>
-                </div>
-                
-                <div class="billing-details">
-                    <div class="billing-row">
-                        <span class="billing-label">Next Billing Date</span>
-                        <span class="billing-value">August 3, 2025</span>
-                    </div>
-                    <div class="billing-row">
-                        <span class="billing-label">Payment Method</span>
-                        <span class="billing-value">•••• 4242</span>
-                    </div>
-                    <div class="billing-row">
-                        <span class="billing-label">Billing Cycle</span>
-                        <span class="billing-value">Monthly</span>
-                    </div>
-                    <div class="billing-row">
-                        <span class="billing-label">Subscription Since</span>
-                        <span class="billing-value">August 3, 2024</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Actions Card -->
-            <div class="card">
-                <h2>Account Actions</h2>
-                <div class="actions">
-                    <button class="btn-action btn-upgrade" onclick="handleUpgrade()">
-                        ⬆️ Upgrade Plan
-                    </button>
-                    <button class="btn-action btn-manage" onclick="handleManageBilling()">
-                        💳 Manage Payment Method
-                    </button>
-                    <button class="btn-action btn-manage" onclick="handleDownloadInvoice()">
-                        📄 Download Invoice
-                    </button>
-                    <button class="btn-action btn-manage" onclick="handleViewBillingHistory()">
-                        📊 View Billing History
-                    </button>
-                </div>
-            </div>
+
+        <div id="noSubscription" class="card hidden" style="margin-bottom: 24px;">
+            <h2>No Active Subscription</h2>
+            <p style="color: #94A3B8; margin-bottom: 16px;">You don't have an active plan yet.</p>
+            <a href="/#pricing" class="btn-action btn-upgrade" style="display:inline-block; text-decoration:none;">View Plans</a>
         </div>
-        
-        <!-- Unsubscribe Section -->
-        <div class="unsubscribe-section">
-            <h3>⚠️ Cancel Subscription</h3>
-            <p>You can cancel your subscription at any time. You'll retain access until the end of your current billing period. No further charges will be made.</p>
-            <button class="btn-action btn-cancel" onclick="handleCancel()" style="width: 100%;">
-                ❌ Cancel My Subscription
-            </button>
-        </div>
-        
-        <!-- Settings Card -->
-        <div class="card settings-section">
-            <h2>Notification Settings</h2>
-            
-            <div class="setting-row">
-                <div>
-                    <div class="setting-label">Email Notifications</div>
-                    <div class="setting-description">Receive billing and service updates via email</div>
+
+        <div id="subscriptionView" class="hidden">
+            <div class="grid">
+                <!-- Subscription Card -->
+                <div class="card">
+                    <h2>Current Plan</h2>
+                    <div class="plan-info">
+                        <div class="plan-name" id="planName">—</div>
+                        <span class="plan-status status-active" id="planStatus">● Active</span>
+                    </div>
+
+                    <div class="billing-details">
+                        <div class="billing-row">
+                            <span class="billing-label">Next Billing Date</span>
+                            <span class="billing-value" id="nextBillingDate">—</span>
+                        </div>
+                        <div class="billing-row">
+                            <span class="billing-label">Payment Method</span>
+                            <span class="billing-value" id="paymentMethod">—</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+
+                <!-- Actions Card -->
+                <div class="card">
+                    <h2>Account Actions</h2>
+                    <div class="actions">
+                        <a href="/#pricing" class="btn-action btn-upgrade" style="text-decoration:none;">
+                            ⬆️ Upgrade Plan
+                        </a>
+                        <button class="btn-action btn-manage" onclick="handleManageBilling()">
+                            💳 Manage Billing &amp; Invoices
+                        </button>
+                    </div>
+                </div>
             </div>
-            
-            <div class="setting-row">
-                <div>
-                    <div class="setting-label">SMS Notifications</div>
-                    <div class="setting-description">Receive important alerts via SMS</div>
-                </div>
-                <div class="toggle" onclick="this.classList.toggle('active')"></div>
-            </div>
-            
-            <div class="setting-row">
-                <div>
-                    <div class="setting-label">Two-Factor Authentication</div>
-                    <div class="setting-description">Add an extra layer of security to your account</div>
-                </div>
-                <div class="toggle" onclick="this.classList.toggle('active')"></div>
+
+            <!-- Unsubscribe Section -->
+            <div class="unsubscribe-section">
+                <h3>⚠️ Cancel Subscription</h3>
+                <p>You can cancel your subscription at any time. You'll retain access until the end of your current billing period. No further charges will be made.</p>
+                <button class="btn-action btn-cancel" onclick="handleCancel()" style="width: 100%;">
+                    ❌ Cancel My Subscription
+                </button>
             </div>
         </div>
     </div>
 
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script>
+        netlifyIdentity.init();
+
+        const user = netlifyIdentity.currentUser();
+        if (!user) {
+            window.location.href = '/login.html';
+        } else {
+            document.getElementById('userName').textContent = user.user_metadata.full_name || user.email;
+            document.getElementById('userEmail').textContent = user.email;
+            loadAccountStatus();
+        }
+
+        function authedFetch(path, options = {}) {
+            return fetch(path, {
+                ...options,
+                headers: {
+                    ...(options.headers || {}),
+                    Authorization: `Bearer ${user.token.access_token}`
+                }
+            });
+        }
+
+        function loadAccountStatus() {
+            authedFetch('/api/account-status')
+                .then((res) => res.json())
+                .then((data) => {
+                    if (!data.hasSubscription) {
+                        document.getElementById('noSubscription').classList.remove('hidden');
+                        return;
+                    }
+                    document.getElementById('subscriptionView').classList.remove('hidden');
+                    document.getElementById('planName').textContent =
+                        data.plan ? data.plan.charAt(0).toUpperCase() + data.plan.slice(1) + ' Plan' : 'Active Plan';
+                    const statusEl = document.getElementById('planStatus');
+                    if (data.cancelAtPeriodEnd) {
+                        statusEl.textContent = '● Cancels at period end';
+                        statusEl.className = 'plan-status status-cancelled';
+                    } else {
+                        statusEl.textContent = '● ' + data.status.charAt(0).toUpperCase() + data.status.slice(1);
+                    }
+                    document.getElementById('nextBillingDate').textContent = data.currentPeriodEnd
+                        ? new Date(data.currentPeriodEnd * 1000).toLocaleDateString('en-AU', { year: 'numeric', month: 'long', day: 'numeric' })
+                        : '—';
+                    document.getElementById('paymentMethod').textContent = data.cardLast4 ? `•••• ${data.cardLast4}` : '—';
+                })
+                .catch(() => {
+                    document.getElementById('noSubscription').classList.remove('hidden');
+                });
+        }
+
         function handleLogout() {
             if (confirm('Are you sure you want to sign out?')) {
+                netlifyIdentity.logout();
                 window.location.href = '/login.html';
             }
         }
-        
-        function handleUpgrade() {
-            // In production, redirect to Stripe Checkout for plan upgrade
-            alert('Redirecting to Stripe Checkout for plan upgrade...\n\nIn production, this would:\n1. Create a Stripe Checkout Session\n2. Redirect to Stripe hosted page\n3. Process payment and upgrade subscription');
-            // Example: window.location.href = '/api/checkout?plan=upgrade';
-        }
-        
+
         function handleManageBilling() {
-            // In production, redirect to Stripe Customer Portal
-            alert('Redirecting to Stripe Customer Portal...\n\nIn production, this would:\n1. Create a Stripe Customer Portal session\n2. Allow users to update payment methods\n3. View billing history\n4. Change subscription plan\n5. Download invoices');
-            // Example: 
-            // fetch('/api/create-portal-link', { method: 'POST', ... })
-            // .then(res => res.json())
-            // .then(data => window.location.href = data.url);
+            authedFetch('/api/create-portal-link', { method: 'POST' })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.url) window.location.href = data.url;
+                    else alert(data.error || 'Could not open billing portal');
+                });
         }
-        
-        function handleDownloadInvoice() {
-            alert('Generating invoice PDF...\n\nIn production, this would:\n1. Fetch latest invoice from Stripe API\n2. Generate PDF with billing details\n3. Download to user device');
-        }
-        
-        function handleViewBillingHistory() {
-            alert('Loading billing history...\n\nIn production, this would:\n1. Fetch all invoices from Stripe API\n2. Display payment history table\n3. Allow download of individual invoices');
-        }
-        
+
         function handleCancel() {
-            if (confirm('Are you sure you want to cancel your subscription?\n\n• You will lose access to premium features at the end of your billing period\n• No further charges will be made\n• You can reactivate anytime before the cancellation date')) {
-                // In production, call backend API to cancel subscription
-                alert('Cancellation initiated. You will receive a confirmation email shortly.\n\nYour access continues until: August 3, 2025');
-                // Example:
-                // fetch('/api/cancel-subscription', {
-                //     method: 'POST',
-                //     headers: { 'Content-Type': 'application/json' },
-                //     body: JSON.stringify({ subscriptionId: 'sub_xxxxx' })
-                // }).then(res => res.json()).then(data => { ... });
+            if (!confirm('Are you sure you want to cancel your subscription?\n\n• You will lose access to premium features at the end of your billing period\n• No further charges will be made')) {
+                return;
             }
+            authedFetch('/api/cancel-subscription', { method: 'POST' })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.success) {
+                        alert('Cancellation scheduled. Your access continues until the end of the current billing period.');
+                        loadAccountStatus();
+                    } else {
+                        alert(data.error || 'Could not cancel subscription');
+                    }
+                });
         }
     </script>
 </body>

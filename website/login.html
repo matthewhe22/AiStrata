@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Login — StrataFlow</title>
+    <meta name="description" content="Sign in to your StrataFlow dashboard. Access your automation workflows, compliance reports, and account settings. New user? Create an account.">
+    <link rel="canonical" href="https://strataflow.work/login">
+    <meta property="og:title" content="Member Login — StrataFlow" />
+    <meta property="og:description" content="Sign in to your StrataFlow dashboard. Access automation workflows and compliance reports." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://strataflow.work/login" />
+    <meta property="og:locale" content="en_AU" />
+    <meta property="og:site_name" content="StrataFlow" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Member Login — StrataFlow" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0F172A;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 420px;
+            padding: 40px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        .logo span { color: #10B981; }
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: #94A3B8;
+            margin-bottom: 32px;
+            font-size: 0.9rem;
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #2563EB, #10B981);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            width: 100%;
+            padding: 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+        .divider {
+            text-align: center;
+            color: #64748B;
+            margin: 24px 0;
+            font-size: 0.85rem;
+        }
+        .hidden { display: none; }
+        .error {
+            color: #EF4444;
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #94A3B8;
+            font-size: 0.9rem;
+        }
+        .back-link:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">Strata<span>Flow</span></div>
+        <h1>Welcome</h1>
+        <p class="subtitle" id="statusText">Sign in or create an account to manage your subscription.</p>
+
+        <button class="btn-primary" onclick="netlifyIdentity.open('login')">Sign In</button>
+        <button class="btn-secondary" onclick="netlifyIdentity.open('signup')">Create Account</button>
+        <div id="authError" class="error hidden"></div>
+        <a href="/" class="back-link">← Back to StrataFlow</a>
+    </div>
+
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script>
+        netlifyIdentity.init();
+
+        // Already signed in? Skip straight to the account portal.
+        const existingUser = netlifyIdentity.currentUser();
+        if (existingUser) {
+            window.location.href = '/portal.html';
+        }
+
+        netlifyIdentity.on('login', () => {
+            window.location.href = '/portal.html';
+        });
+
+        netlifyIdentity.on('signup', () => {
+            document.getElementById('statusText').textContent =
+                'Check your email to confirm your account, then sign in.';
+        });
+
+        netlifyIdentity.on('error', (err) => {
+            const errorEl = document.getElementById('authError');
+            errorEl.textContent = err.message || 'Something went wrong. Please try again.';
+            errorEl.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
