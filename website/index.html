@@ -13,6 +13,7 @@
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://strataflow.work/">
+    <link rel="alternate" hreflang="en-AU" href="https://strataflow.work/">
 
     <!-- Open Graph -->
     <meta property="og:title" content="StrataFlow — AI Strata Management Software & Workflow Automation | Australia" />
@@ -28,16 +29,24 @@
     <meta name="twitter:title" content="StrataFlow — AI Strata Management Software & Workflow Automation" />
     <meta name="twitter:description" content="Leading AI strata management software for Australian OC managers. Compliance, workflow & committee automation. Free audit." />
 
-    <!-- Structured Data: Organization -->
+    <!-- Structured Data: Organization + SoftwareApplication -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
+      "@type": ["Organization", "SoftwareApplication"],
       "name": "StrataFlow",
       "url": "https://strataflow.work/",
       "description": "AI-powered workflow automation for Australian strata managers. Cutting admin time by 40%+ since 2025.",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
       "email": "hello@strataflows.com.au",
       "foundingDate": "2025",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "hello@strataflows.com.au",
+        "contactType": "sales",
+        "availableLanguage": "English"
+      },
       "areaServed": {
         "@type": "Country",
         "name": "Australia"
@@ -1395,16 +1404,16 @@
             <div class="footer-col">
                 <h4>Resources</h4>
                 <a href="#faq">FAQ</a>
-                <a href="#faq">Blog</a>
-                <a href="#faq">Case Studies</a>
+                <a href="https://strataflow.work/checklist">Compliance Checklist</a>
+                <a href="https://strataflow.work/demo">Live Demo</a>
                 <a href="#comparison">Strata Tech Guide 2025</a>
             </div>
             <div class="footer-col">
                 <h4>Account</h4>
                 <a href="/login.html">Member Login</a>
                 <a href="/portal.html">My Account</a>
-                <a href="#contact" onclick="openContactModal(); return false;">Privacy Policy</a>
-                <a href="#contact" onclick="openContactModal(); return false;">Terms of Service</a>
+                <a href="mailto:hello@strataflows.com.au?subject=Privacy%20Policy%20Inquiry">Privacy Policy</a>
+                <a href="mailto:hello@strataflows.com.au?subject=Terms%20of%20Service%20Inquiry">Terms of Service</a>
             </div>
         </div>
         <div class="footer-bottom">
