@@ -39,11 +39,11 @@
       "description": "AI-powered workflow automation for Australian strata managers. Cutting admin time by 40%+ since 2025.",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Web",
-      "email": "hello@strataflows.com.au",
+      "email": "hello@strataflow.work",
       "foundingDate": "2025",
       "contactPoint": {
         "@type": "ContactPoint",
-        "email": "hello@strataflows.com.au",
+        "email": "hello@strataflow.work",
         "contactType": "sales",
         "availableLanguage": "English"
       },
@@ -277,9 +277,9 @@
             --dark-mid: #1E293B;
             --dark-light: #334155;
             
-            /* === GRADIENTS === */
-            --gradient-hero: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
-            --gradient-accent: linear-gradient(135deg, #2563EB, #10B981);
+            /* === SOLID ACCENTS (gradients removed) === */
+            --gradient-hero: #0F172A;
+            --gradient-accent: #2563EB;
             
             /* === SHADOWS (3 levels) === */
             --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
@@ -698,6 +698,89 @@
             }
         }
 
+        /* ===== SUPPLIER INVOICE & CONTRACT AUDIT ===== */
+        .audit {
+            padding: 88px 0;
+            background: var(--off-white, #F8FAFC);
+        }
+        .audit-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+            text-align: left;
+        }
+        .audit-h {
+            font-size: 1.15rem;
+            color: var(--primary, #2563EB);
+            margin: 0 0 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary, #2563EB);
+        }
+        .audit-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .audit-list li {
+            position: relative;
+            padding: 0 0 14px 30px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-muted, #475569);
+        }
+        .audit-list li::before {
+            content: "\2713";
+            position: absolute;
+            left: 0;
+            top: 1px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent, #10B981);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .audit-list.audit-outcomes li::before {
+            background: var(--primary, #2563EB);
+        }
+        .audit-list li strong { color: var(--dark, #0F172A); }
+        .audit-note {
+            margin-top: 22px;
+            padding: 20px 22px;
+            border-left: 4px solid var(--accent, #10B981);
+            background: #fff;
+            border-radius: 0 10px 10px 0;
+            font-size: 0.92rem;
+            line-height: 1.65;
+            color: var(--text-muted, #475569);
+        }
+        .audit-note strong { color: var(--dark, #0F172A); }
+        @media (max-width: 860px) {
+            .audit-grid { grid-template-columns: 1fr; gap: 32px; }
+        }
+
+        /* ===== BILLING PAUSED NOTICE ===== */
+        .billing-paused {
+            max-width: 760px;
+            margin: 26px auto 0;
+            padding: 16px 22px;
+            background: #FFF7ED;
+            border: 1px solid #FED7AA;
+            border-left: 4px solid #F59E0B;
+            border-radius: 0 10px 10px 0;
+            text-align: left;
+            font-size: 0.94rem;
+            line-height: 1.6;
+            color: #7C2D12;
+        }
+        .billing-paused strong { color: #7C2D12; }
+        .billing-paused a { color: #B45309; font-weight: 600; text-decoration: underline; }
+
         /* ===== PRICING ===== */
         .pricing {
             padding: 120px 0;
@@ -882,7 +965,7 @@
             position: absolute; top: -50%; left: 50%;
             transform: translateX(-50%);
             width: 800px; height: 800px;
-            background: radial-gradient(circle, rgba(37,99,235,0.2) 0%, transparent 70%);
+            background: rgba(37,99,235,0.10);
             border-radius: 50%;
         }
         .cta-content { position: relative; z-index: 1; }
@@ -995,7 +1078,8 @@
             <a href="#services">Services</a>
             <a href="#how-it-works">How It Works</a>
             <a href="#comparison">Comparison</a>
-            <a href="#pricing">Pricing</a>
+            <a href="#audit">Invoice Audit</a>
+                        <a href="#pricing">Pricing</a>
             <a href="#faq">FAQ</a>
             <a href="/login.html" class="nav-login">Member Login</a>
             <a href="#contact" class="nav-cta">Free Compliance Audit →</a>
@@ -1140,6 +1224,55 @@
                     <li>Ongoing technical support</li>
                 </ul>
             </div>
+            <div class="service-card">
+                <span class="service-number">05</span>
+                <h3>Supplier Invoice &amp; Contract Audit</h3>
+                <p>Every supplier invoice reconciled against the contract before it is paid. StrataFlow reads the agreement, extracts the agreed fee schedule, inclusions and escalation clauses, then checks each invoice line by line and flags anything that does not match — so overcharges are caught before the money leaves the account, not eighteen months later.</p>
+                <ul class="service-features">
+                    <li>Line-by-line invoice vs contract reconciliation</li>
+                    <li>Escalation &amp; CPI clause validation (including partial-CPI caps)</li>
+                    <li>Inclusions vs chargeable extras — spot double-billing</li>
+                    <li>Multi-OC allocation checks (OC1&ndash;OC5)</li>
+                    <li>Call-out, after-hours and annual-service rate validation</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== SUPPLIER INVOICE & CONTRACT AUDIT ===== -->
+<section class="audit" id="audit">
+    <div class="container">
+        <span class="section-label" style="color: var(--accent);">Pre-Payment Assurance</span>
+        <h2 class="section-title">Supplier Invoice &amp; Contract Compliance Audit</h2>
+        <p class="section-subtitle">Most strata invoices are approved on trust, not on evidence. A building manager signs off, accounts processes, the payment goes out &mdash; and nobody re-reads the contract. That is how rates drift, CPI gets over-applied, and &ldquo;extras&rdquo; quietly become permanent.</p>
+
+        <div class="audit-grid">
+            <div class="audit-col">
+                <h3 class="audit-h">What we check, every invoice</h3>
+                <ul class="audit-list">
+                    <li><strong>Agreed fee vs billed fee</strong> &mdash; the base rate in the contract against what actually appears on the invoice.</li>
+                    <li><strong>Escalation &amp; CPI clauses</strong> &mdash; including partial caps. If the contract allows 60% of CPI, full CPI is an overcharge.</li>
+                    <li><strong>Inclusions vs extras</strong> &mdash; many agreements already include consumables, chemicals or call-out labour. We catch them being billed again.</li>
+                    <li><strong>Multi-OC allocation</strong> &mdash; confirming each charge lands on the correct owners corporation (OC1&ndash;OC5), not silently on OC1.</li>
+                    <li><strong>Rate-card conformance</strong> &mdash; call-out, after-hours, public-holiday and annual-service rates against the agreed schedule.</li>
+                    <li><strong>Authorisation thresholds</strong> &mdash; work above the contract&rsquo;s approval limit must carry a quote and written approval.</li>
+                    <li><strong>Term &amp; expiry</strong> &mdash; invoices raised outside a live contract term, or on a rolled-over rate with no signed renewal.</li>
+                    <li><strong>Duplicates and out-of-scope items</strong> &mdash; the same service billed twice, or a scheduled service charged as extraordinary work.</li>
+                </ul>
+            </div>
+            <div class="audit-col">
+                <h3 class="audit-h">What you get</h3>
+                <ul class="audit-list audit-outcomes">
+                    <li><strong>Approve</strong> &mdash; invoice matches the contract, with the supporting clause cited.</li>
+                    <li><strong>Query</strong> &mdash; a variance detected, with the exact dollar difference and the clause it breaches, ready to send to the supplier.</li>
+                    <li><strong>Recover</strong> &mdash; historical overcharges identified across past invoices so you can raise a credit request.</li>
+                    <li><strong>Audit trail</strong> &mdash; every check recorded against the invoice, so your decisions are defensible at AGM and on audit.</li>
+                </ul>
+                <div class="audit-note">
+                    <strong>Works with what you already have.</strong> Contracts are ingested from your document store &mdash; including scanned agreements &mdash; and invoices from email or your accounting platform. No supplier has to change how they bill.
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -1246,6 +1379,11 @@
         <span class="section-label">Pricing</span>
         <h2 class="section-title">Simple, Predictable Pricing</h2>
         <p class="section-subtitle" style="margin: 0 auto;">No per-lot fees. No hidden costs. Flat monthly retainer that scales with your business needs.</p>
+        <div class="billing-paused" role="status">
+            <strong>Online signup is temporarily paused.</strong> Card checkout is switched off while we rework our billing.
+            <a href="#contact">Book a free compliance audit</a> or email
+            <a href="mailto:hello@strataflow.work">hello@strataflow.work</a> and we&rsquo;ll onboard you manually &mdash; same plans, invoiced directly.
+        </div>
         <div class="pricing-grid">
             <div class="pricing-card">
                 <h3>Starter</h3>
@@ -1420,7 +1558,7 @@
             <h2>Ready to Automate Your Strata Management Workflow?</h2>
             <p>Book your free 30-minute compliance audit for your NSW, VIC, or QLD strata business. We'll analyse your current strata management processes and show you exactly where AI workflow automation can save you hours every week — no matter which state you operate in.</p>
             <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-                <a href="mailto:hello@strataflows.com.au" class="btn-primary" style="font-size: 1.1rem; padding: 18px 40px;">
+                <a href="mailto:hello@strataflow.work" class="btn-primary" style="font-size: 1.1rem; padding: 18px 40px;">
                     📧 Book Free Audit →
                 </a>
                 <button onclick="openContactModal()" class="btn-secondary" style="font-size: 1.1rem; padding: 18px 40px;">
@@ -1459,8 +1597,8 @@
                 <h4>Account</h4>
                 <a href="/login.html">Member Login</a>
                 <a href="/portal.html">My Account</a>
-                <a href="mailto:hello@strataflows.com.au?subject=Privacy%20Policy%20Inquiry">Privacy Policy</a>
-                <a href="mailto:hello@strataflows.com.au?subject=Terms%20of%20Service%20Inquiry">Terms of Service</a>
+                <a href="mailto:hello@strataflow.work?subject=Privacy%20Policy%20Inquiry">Privacy Policy</a>
+                <a href="mailto:hello@strataflow.work?subject=Terms%20of%20Service%20Inquiry">Terms of Service</a>
             </div>
         </div>
         <div class="footer-bottom">
@@ -1561,23 +1699,19 @@
             .catch(() => alert('Could not start checkout. Please try again.'));
     }
 
-    // Stripe Payment Links — update these in Stripe Dashboard → Payment Links
-    const STRIPE_PAYMENT_LINKS = {
-        starter: 'https://buy.stripe.com/test_starter_link',
-        growth: 'https://buy.stripe.com/test_growth_link'
-    };
+    // Online checkout is temporarily unavailable while we rework billing.
+    // Every plan button routes to the holding page instead of a payment provider.
+    const CHECKOUT_PAUSED = true;
+    const CHECKOUT_PAUSED_URL = '/pricing-paused.html';
 
     function handleSubscribe(plan) {
         if (plan === 'enterprise') {
             openContactModal();
             return;
         }
-
-        const link = STRIPE_PAYMENT_LINKS[plan];
-        if (link && link !== 'https://buy.stripe.com/test_starter_link' && link !== 'https://buy.stripe.com/test_growth_link') {
-            window.location.href = link;
-        } else {
-            alert('Payment link not configured yet. Please contact us.');
+        if (CHECKOUT_PAUSED) {
+            window.location.href = CHECKOUT_PAUSED_URL;
+            return;
         }
     }
 </script>
@@ -1745,7 +1879,7 @@
 .btn-submit {
     width: 100%;
     padding: 16px;
-    background: linear-gradient(135deg, #2563eb, #10b981);
+    background: #2563eb;
     color: white;
     border: none;
     border-radius: 8px;
@@ -1876,7 +2010,7 @@ async function submitContactForm(event) {
     } catch (error) {
         // Show error message
         formStatus.className = 'error';
-        formStatus.innerHTML = `<strong>❌ Oops!</strong> There was an error sending your message. Please try again or email us directly at <a href="mailto:hello@strataflows.com.au">hello@strataflows.com.au</a>`;
+        formStatus.innerHTML = `<strong>❌ Oops!</strong> There was an error sending your message. Please try again or email us directly at <a href="mailto:hello@strataflow.work">hello@strataflow.work</a>`;
         formStatus.style.display = 'block';
     } finally {
         submitBtn.disabled = false;
