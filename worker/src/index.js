@@ -7,7 +7,7 @@
  * send_email binding (the Pages API accepts one and silently discards it).
  */
 
-const TO = "matthew.he@capconnex.com.au";
+const TO = "matthew.he@outlook.com";
 const FROM = { email: "hello@strataflow.work", name: "StrataFlow Website" };
 
 const json = (body, status = 200) =>
