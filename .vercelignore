@@ -1,0 +1,17 @@
+# Vercel deploy = the DEMO APP only (web/ + api/ + server/).
+# The marketing site under website/ is deployed by Netlify / Cloudflare Pages
+# and must never be bundled into this deployment.
+website/
+netlify.toml
+_headers
+_redirects
+
+# Local docs and archives
+*.zip
+*.md
+skills/
+brand/
+
+# Local scratch
+node_modules/
+.env
