@@ -137,7 +137,10 @@ async function handleContact(request, env) {
     });
     return json({ ok: true });
   } catch (err) {
-    console.error("contact send failed:", err && err.message);
+    const detail = (err && (err.message || String(err))) || "unknown";
+    console.error("contact send failed:", detail);
+    // `detail` is logged, not returned: it can name the destination mailbox and
+    // is not something a website visitor should see.
     return json(
       { ok: false, error: "We couldn't send your message. Please email hello@strataflow.work directly." },
       502,
