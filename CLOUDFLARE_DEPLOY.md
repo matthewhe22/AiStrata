@@ -1,143 +1,166 @@
 # StrataFlow → Cloudflare Pages
 
-**Feasibility: yes.** `strataflow.work` is **already on Cloudflare DNS**
-(`jake.ns.cloudflare.com`, `noor.ns.cloudflare.com`), so moving hosting from
-Netlify to Cloudflare Pages needs no registrar or nameserver change — it is a
-DNS-record swap inside a zone you already own. The site is pure static
-HTML/CSS/JS with no build step, which is the ideal case for Pages.
+**Status: deployed and live at <https://strataflow.pages.dev>.**
+DNS still points at Netlify — the cutover has not been made.
+
+`strataflow.work` is already on Cloudflare DNS (`jake.ns.cloudflare.com`,
+`noor.ns.cloudflare.com`), so this is a DNS-record swap inside a zone already
+owned — no registrar or nameserver change needed. The site is static
+HTML/CSS/JS, the ideal case for Pages.
 
 ---
 
-## Why it fits
+## What is deployed
 
-| Requirement | Status |
-|---|---|
-| Domain already on Cloudflare | ✅ `strataflow.work` |
-| Build step | ✅ none — static files only, no `npm install` needed |
-| Largest file | ✅ `logo-512.png` at 241 KB (Pages limit is 25 MiB/file) |
-| Total files | ✅ ~18 files |
-| Server-side functions | ⚠️ `functions/checkout.js` is a **Netlify** function — it does not run on Pages. It is currently unused because checkout is paused, so nothing breaks. |
-| Email routing | ✅ Cloudflare Email Routing is free and the domain is already on Cloudflare |
+| Piece | Where | Notes |
+|---|---|---|
+| Marketing site (`website/`) | **Cloudflare Pages** project `strataflow` | live at `strataflow.pages.dev`; still served on `strataflow.work` by Netlify until the cutover |
+| Demo app (`web/` + `api/` + `server/`) | **Vercel** project `aistrata` | `aistrata.vercel.app` |
+| Contact form backend (`worker/`) | **not deployed** | needs Workers Scripts: Edit — see Step 1 |
 
-## Free plan notes
-
-Cloudflare Pages on the free plan has no bandwidth or request charges (that is
-the model — Cloudflare does not bill for static egress). The practical ceilings
-are around 500 builds/month, 100 custom domains per project, and unlimited
-projects. For a brochure site of this size, cost is $0/month.
-
-> Could not re-verify these numbers against the docs during this session — the
-> machine's DNS resolver was failing on `developers.cloudflare.com`. Treat the
-> figures as to-be-confirmed in the Cloudflare dashboard.
-
----
-
-## What was already done (committed `ae3c75f`, pushed to GitHub)
-
-Content and UI changes are **already live** on the current Netlify host:
-
-- ✅ All contact/form emails → `hello@strataflow.work` (was `hello@strataflows.com.au` — a domain that does not exist, NXDOMAIN)
-- ✅ Every gradient removed — hero, buttons, badges, cards now use flat solid colours
-  (`--gradient-hero: #0F172A`, `--gradient-accent: #2563EB`); 0 `linear-gradient`/`radial-gradient` functions remain
-- ✅ Stripe checkout paused — plan buttons now route to `/pricing-paused.html`;
-  zero `buy.stripe.com` references remain
-- ✅ New holding page `pricing-paused.html` (noindex) with a manual-onboarding route
-- ✅ "Online signup is temporarily paused" notice on the pricing section
-- ✅ New feature shipped: **Supplier Invoice & Contract Audit** — service card 05 +
-  a full `#audit` section + nav link ("Invoice Audit")
-- ✅ `_headers` and `_redirects` rewritten for Cloudflare Pages
-- ✅ Repo hygiene: 6 site pages restored from git (they had been deleted from the
-  working tree), 3 stray `Avant_AGM_Minutes_*.docx` files moved to
-  `~/Documents/avant_agm_minutes/`
-
----
-
-## Step 1 — Deploy to Cloudflare Pages
-
-### Option A — Git integration (recommended; auto-deploys on push)
-
-In the Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git**:
-
-- Repository: `matthewhe22/AiStrata`
-- Branch: `main`
-- Framework preset: **None**
-- Build command: *(leave empty)*
-- Build output directory: `website`
-
-Every future `git push` then redeploys automatically.
-
-### Option B — Direct upload from this machine
-
-Needs a Cloudflare API token (see Step 3) or `wrangler login`:
+Deploy / redeploy the site:
 
 ```bash
 cd ~/Documents/strataflows
-npx wrangler pages deploy website --project-name=strataflow
+export CLOUDFLARE_API_TOKEN=...            # token with Pages:Edit
+export CLOUDFLARE_ACCOUNT_ID=2cbce9c1dba758a4a824d9a777ddc8b2
+npx wrangler pages deploy website --project-name=strataflow --branch=main
 ```
 
 ---
 
-## Step 2 — Point the domain at Pages
+## Hard-won constraints (verified — do not re-litigate)
 
-Once the project exists, in **Pages → your project → Custom domains** add
-`strataflow.work`. Because the zone is already on Cloudflare this creates the
-DNS record automatically.
+**1. Direct Upload does not support a `functions/` directory.**
+`wrangler pages deploy <dir>` uploads static assets only; there is no
+`--functions-directory` flag. Server-side code with Direct Upload requires
+Advanced Mode (`_worker.js`).
 
-**Then remove the old Netlify DNS records** — the current `A` record
-(`54.253.94.210`, Netlify) will otherwise still win and the site will keep
-serving from Netlify.
+**2. Pages projects cannot take a `send_email` binding.**
+`PATCH /accounts/{id}/pages/projects/{name}` with `send_email` returns
+`success: true` and then reads back as `null`. Tried both the object and the
+array shape. The binding has to live on a **Worker**.
 
-Cutover order that avoids downtime:
-1. Add the custom domain in Pages and let it provision SSL (usually minutes)
-2. Test against the `*.pages.dev` URL first
-3. Only then delete the Netlify `A`/`CNAME` records
-4. Once confirmed, disconnect the site in Netlify so it stops auto-deploying
+**3. `web/` (the demo) needs a build step.**
+`web/index.html` loads `/app.js`, but the repo only contained `web/app.jsx`
+(React source) — no bundler, no `build` script, no committed `app.js`. So
+Vercel was failing the build *and* serving an empty shell. Fixed with
+`esbuild.config.mjs`, run by `npm run build`.
 
----
+> Gotcha: `--define:process.env.NODE_ENV=production` on the CLI substitutes the
+> bare *identifier* `production`, which throws a ReferenceError inside React.
+> The config file uses `JSON.stringify()` so the value is a real string.
 
-## Step 3 — Email routing: `hello@strataflow.work` → `matthew.he@capconnex.com.au`
-
-Email Routing is free and takes about five minutes **but needs zone access**,
-which the current API token does not have.
-
-In the Cloudflare dashboard:
-
-1. Select the **strataflow.work** zone → **Email → Email Routing**
-2. Click **Enable Email Routing** — Cloudflare auto-adds the required `MX` and
-   `TXT` (SPF) records. If the zone currently has any existing `MX` records for
-   that domain, they must be removed first.
-3. Under **Destination addresses** add `matthew.he@capconnex.com.au` — Cloudflare
-   sends a verification email to that address; click the link to confirm.
-4. Under **Routes → Custom addresses** create:
-   - `hello@strataflow.work` → `matthew.he@capconnex.com.au`
-   - (optional but tidy) `accounts@strataflow.work` → same destination
-5. Optionally enable **Catch-all** → `matthew.he@capconnex.com.au` so nothing sent
-   to the domain is ever silently dropped.
-
-> Note: route verification is only needed once per custom address in `to` (the
-> `hello@` side needs no verification — only the destination inbox does).
-
-Verify afterwards from an external mailbox:
-`hello@strataflow.work` should arrive at `matthew.he@capconnex.com.au`.
+**4. The contact form has no working backend on either host.**
+`POST /` with `form-name=contact` returns **404 on Netlify** (Forms is not
+handling it) and **405 on Pages**. The JS posts to `/api/contact` first and
+falls back to Netlify Forms; because both return non-2xx the visitor gets an
+honest error instead of a false "sent". No silent lead loss — but no working
+form either, until the Worker is deployed.
 
 ---
 
-## Step 4 — What still needs your credentials
+## Step 1 — Deploy the form Worker
 
-| Task | Blocker |
+Requires the token to carry **Account → Workers Scripts → Edit** (currently
+denied with `No access to the specified resource`).
+
+```bash
+cd ~/Documents/strataflows/worker
+export CLOUDFLARE_API_TOKEN=...
+export CLOUDFLARE_ACCOUNT_ID=2cbce9c1dba758a4a824d9a777ddc8b2
+npx wrangler deploy
+```
+
+Then route it on the site's own domain:
+
+- Workers route: `strataflow.work/api/*` → Worker `strataflow-form`
+
+`wrangler.toml` already declares the binding:
+
+```toml
+[[send_email]]
+name = "SEND_EMAIL"
+```
+
+The recipient must be an address **already verified in Email Routing**;
+`matthew.he@capconnex.com.au` is. Sending as `hello@strataflow.work` needs
+Email Routing enabled on the zone (it is).
+
+Sanity check after deploy: `GET /health` should return
+`{"ok":true,"send_email_bound":true}`.
+
+---
+
+## Step 2 — Cut over DNS
+
+Once `strataflow.pages.dev` and the Worker both look right:
+
+1. Add `strataflow.work` and `www.strataflow.work` under **Pages → Custom domains**
+2. Let Cloudflare provision SSL
+3. **Remove the Netlify records** — both names are currently `CNAME` →
+   `nervous-perlman-239168.netlify.app` (`proxied=false`). They will otherwise
+   keep taking precedence and the site will keep serving from Netlify.
+4. Disconnect the site in Netlify so it stops auto-deploying.
+
+Do the steps in that order to avoid downtime.
+
+---
+
+## Step 3 — Email routing
+
+Already configured on the zone:
+
+```
+MX     route1/2/3.mx.cloudflare.net                      (21/22/23)
+TXT    v=spf1 include:_spf.mx.cloudflare.net ~all
+TXT    cf2024-1._domainkey   <Cloudflare Email Routing DKIM>
+TXT    _dmarc  "v=DMARC1; p=none; rua=mailto:matthew.he@capconnex.com.au; fo=1"
+```
+
+Routes (`/zones/{id}/email/routing/rules`):
+
+| From | To |
 |---|---|
-| Create the Pages project | Token lacks **Account → Cloudflare Pages → Edit** |
-| Attach `strataflow.work` to Pages | Token lacks **Zone → strataflow.work** access |
-| Enable Email Routing + custom address | Same — token only grants `capconnex.com.au` |
-| Disconnect Netlify | Netlify CLI is broken locally (`Cannot find module .../netlify-cli/bin/run.js`) |
+| `hello@strataflow.work` | `matthew.he@capconnex.com.au` |
+| `info@strataflow.work` | `matthew.he@capconnex.com.au` |
+| `accounts@strataflow.work` | `matthew.he@capconnex.com.au` |
 
-To let me finish Steps 1–3 unattended, create an API token at
-<https://dash.cloudflare.com/profile/api-tokens> with:
+**Outstanding:** a test message was accepted by Cloudflare's MX
+(`RCPT TO -> 250 2.1.0 Ok`) and produced no bounce, but arrival is not yet
+confirmed. `capconnex.com.au` is hosted on **Zoho** (`mx.zoho.com`) with
+`DMARC p=quarantine`, and forwarded mail is a common spam-filter casualty —
+check Zoho's Spam folder before assuming the routing is broken.
 
-- **Account → Cloudflare Pages → Edit**
-- **Zone → DNS → Edit** (scoped to `strataflow.work`)
-- **Zone → Email Routing Rules → Edit** (scoped to `strataflow.work`)
+Email Routing is **receive-and-forward only**: no outbound SMTP. Replying *as*
+`hello@strataflow.work` would need a sending service (Resend/Brevo) or the
+Worker's `send_email` path.
 
-The existing token on this machine (`cfut_…`) is scoped to
-`capconnex.com.au` only — it verifies as active but returns an empty zone list
-for `strataflow.work`.
+---
+
+## Step 4 — Costs
+
+All free at this scale, per Cloudflare's Pages Functions pricing page:
+
+- Static asset requests: **free and unlimited** on every plan
+- Pages Functions / Worker requests: **100,000/day** on the Workers Free plan, resetting midnight UTC
+- Email Routing: free
+
+A request only counts against the quota when it invokes server-side code
+(`a request is considered static when it does not invoke Functions`), so normal
+page views are free regardless of volume.
+
+---
+
+## Change log
+
+| Commit | What |
+|---|---|
+| `ae3c75f` | Remove gradients; emails → `hello@strataflow.work`; pause Stripe behind `pricing-paused.html`; add Supplier Invoice & Contract Audit feature; Pages config |
+| `ada545d` | This deployment guide |
+| `34ea7be` | Separate demo from marketing site; fix the broken Vercel build (esbuild pipeline + `.vercelignore`) |
+| `76ec470` | Contact form → `/api/contact` with a Netlify Forms fallback; add `worker/` |
+
+Repo hygiene done along the way: 6 site pages restored from git (they had been
+deleted from the working tree) and 3 stray `Avant_AGM_Minutes_*.docx` files
+moved out to `~/Documents/avant_agm_minutes/`.
