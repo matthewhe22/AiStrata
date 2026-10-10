@@ -1982,19 +1982,47 @@ async function submitContactForm(event) {
     submitBtn.textContent = 'Sending...';
     
     try {
-        // Send via Netlify Forms
-        const response = await fetch('/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-                'form-name': 'contact',
-                ...formData
-            }).toString()
-        });
-        
-        if (response.ok) {
+        // Primary path: the Cloudflare Pages Function. It emails the enquiry
+        // through Email Routing.
+        let delivered = false;
+        let serverError = '';
+
+        try {
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ...formData,
+                    page: window.location.href,
+                    source: 'strataflow.work contact modal'
+                })
+            });
+            const result = await response.json().catch(() => null);
+            if (response.ok && result && result.ok) {
+                delivered = true;
+            } else if (result && result.error) {
+                serverError = result.error;
+            }
+        } catch (e) {
+            serverError = '';
+        }
+
+        // Fallback: while the site is still served by Netlify (before the
+        // Cloudflare cutover) /api/contact does not exist, so fall back to
+        // Netlify Forms. A 2xx from POST / with form-name means Netlify's form
+        // handler accepted it. Harmless on Pages, which never reaches here.
+        if (!delivered) {
+            try {
+                const fb = await fetch('/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ 'form-name': 'contact', ...formData }).toString()
+                });
+                if (fb.ok) delivered = true;
+            } catch (e) { /* fall through to the error state */ }
+        }
+
+        if (delivered) {
             // Show success message
             formStatus.className = 'success';
             formStatus.innerHTML = '<strong>✅ Thank you!</strong><br>Your message has been sent successfully. We\'ll get back to you within 24 hours.';
@@ -2005,7 +2033,7 @@ async function submitContactForm(event) {
                 closeContactModal();
             }, 3000);
         } else {
-            throw new Error('Submission failed');
+            throw new Error(serverError || 'Submission failed');
         }
     } catch (error) {
         // Show error message

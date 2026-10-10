@@ -1,0 +1,8 @@
+name = "strataflow-form"
+main = "src/index.js"
+compatibility_date = "2026-10-10"
+
+# Cloudflare Email Routing sending. The recipient must be an address already
+# verified in Email Routing for this account.
+[[send_email]]
+name = "SEND_EMAIL"
