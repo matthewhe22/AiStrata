@@ -14,8 +14,19 @@
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root { --primary: #2563EB; --ink: #111418; --ink-muted: #6E7278; --hair: rgba(0,0,0,0.09); }
+        /* Metric-compatible fallback for Inter — avoids the font-swap layout shift. */
+        @font-face {
+            font-family: 'Inter Fallback';
+            font-style: normal;
+            font-weight: 100 900;
+            src: local('Arial');
+            ascent-override: 90%;
+            descent-override: 22.43%;
+            line-gap-override: 0%;
+            size-adjust: 107.06%;
+        }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Inter', 'Inter Fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             color: var(--ink); background: #fff; line-height: 1.5;
             -webkit-font-smoothing: antialiased;
             min-height: 100vh; display: flex; flex-direction: column;

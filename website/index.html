@@ -335,8 +335,23 @@
         }
 
         html { scroll-behavior: smooth; font-size: 16px; -webkit-text-size-adjust: 100%; }
+        /* Metric-compatible fallback for Inter.
+           Without this the Google Fonts swap reflows the hero text before Inter
+           finishes loading — measured as a single 0.136 layout shift on H1 +
+           .hero-lede + .hero-detail. These overrides match Inter's metrics to
+           Arial so the swap no longer moves anything. */
+        @font-face {
+            font-family: 'Inter Fallback';
+            font-style: normal;
+            font-weight: 100 900;
+            src: local('Arial');
+            ascent-override: 90%;
+            descent-override: 22.43%;
+            line-gap-override: 0%;
+            size-adjust: 107.06%;
+        }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Inter', 'Inter Fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             color: var(--ink);
             background: var(--white);
             line-height: 1.5;
