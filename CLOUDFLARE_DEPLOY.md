@@ -16,7 +16,7 @@ HTML/CSS/JS, the ideal case for Pages.
 |---|---|---|
 | Marketing site (`website/`) | **Cloudflare Pages** project `strataflow` | live at `strataflow.pages.dev`; still served on `strataflow.work` by Netlify until the cutover |
 | Demo app (`web/` + `api/` + `server/`) | **Vercel** project `aistrata` | `aistrata.vercel.app` |
-| Contact form backend (`worker/`) | **not deployed** | needs Workers Scripts: Edit — see Step 1 |
+| Contact form backend (`worker/`) | **Cloudflare Worker** `strataflow-form` | live at `strataflow-form.strataflow.workers.dev`; the site falls back to this URL until the cutover makes the same-origin `/api/contact` route live |
 
 Deploy / redeploy the site:
 
@@ -51,26 +51,37 @@ Vercel was failing the build *and* serving an empty shell. Fixed with
 > bare *identifier* `production`, which throws a ReferenceError inside React.
 > The config file uses `JSON.stringify()` so the value is a real string.
 
-**4. The contact form has no working backend on either host.**
-`POST /` with `form-name=contact` returns **404 on Netlify** (Forms is not
-handling it) and **405 on Pages**. The JS posts to `/api/contact` first and
-falls back to Netlify Forms; because both return non-2xx the visitor gets an
-honest error instead of a false "sent". No silent lead loss — but no working
-form either, until the Worker is deployed.
+**4. The contact form is delivered by a Worker, not by the host.**
+`POST /` with `form-name=contact` returns **404 on Netlify** (Forms never handled
+it) and **405 on Pages**. The form posts same-origin to `/api/contact`, and
+falls back to the Worker URL while the hostname is still on Netlify. It fails
+loudly rather than reporting a false "sent", so no lead is silently lost.
+
+**5. Zoho refuses mail from Cloudflare Email Routing.**
+`matthew.he@capconnex.com.au` is hosted on Zoho. Both the forward path and the
+`send_email` binding fail with `temporary delivery failure`, retried and
+persistently failing, while a direct SMTP probe of `mx.zoho.com` accepts the
+same mailbox with `250`. Outlook (`matthew.he@outlook.com`) accepts the same
+mail without complaint, so the routing destination is Outlook for now.
+
+> Allow for a few minutes of propagation after verifying a destination — sends
+> immediately after verification failed, then succeeded a minute later.
 
 ---
 
-## Step 1 — Deploy the form Worker
+## Step 1 — The form Worker (deployed)
 
-Requires the token to carry **Account → Workers Scripts → Edit** (currently
-denied with `No access to the specified resource`).
+Live as `strataflow-form`. Redeploy after any change to `worker/`:
 
 ```bash
 cd ~/Documents/strataflows/worker
-export CLOUDFLARE_API_TOKEN=...
+export CLOUDFLARE_API_TOKEN=...            # needs Account -> Workers Scripts -> Edit
 export CLOUDFLARE_ACCOUNT_ID=2cbce9c1dba758a4a824d9a777ddc8b2
 npx wrangler deploy
 ```
+
+> A `workers.dev` subdomain had to be registered first (`strataflow.workers.dev`);
+> without one `wrangler deploy` refuses unless the Worker has a route.
 
 Then route it on the site's own domain:
 
