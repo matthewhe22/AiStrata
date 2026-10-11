@@ -260,37 +260,63 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* ===== CSS RESET & BASE ===== */
+        /* ==========================================================
+           STRATAFLOW — DESIGN SYSTEM
+           Restraint first: black, white, grey + ONE blue accent.
+           Solid fills only. NO gradients anywhere.
+           ========================================================== */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
         :root {
-            /* === STANDARDIZED COLOR PALETTE (5 core colors) === */
+            /* Accent — used sparingly: CTAs and emphasis only */
             --primary: #2563EB;
             --primary-dark: #1D4ED8;
+            --primary-soft: #60A5FA;
             --accent: #10B981;
-            --dark: #0F172A;
-            --light: #F1F5F9;
-            
-            /* === DERIVED COLORS === */
-            --white: #FFFFFF;
-            --gray: #64748B;
-            --gray-light: #94A3B8;
+
+            /* Core surfaces */
+            --dark: #0F172A;          /* near-black band */
             --dark-mid: #1E293B;
             --dark-light: #334155;
-            
-            /* === SOLID ACCENTS (gradients removed) === */
-            --gradient-hero: #0F172A;
-            --gradient-accent: #2563EB;
-            
-            /* === SHADOWS (3 levels) === */
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
-            
-            /* === BORDER RADIUS (2 values) === */
-            --radius: 12px;
-            --radius-lg: 20px;
-            
-            /* === SPACING SCALE (4px base) === */
+            --white: #FFFFFF;
+            --light: #F5F5F7;         /* quiet grey band */
+            --light-2: #FAFAFC;
+
+            /* Text on light */
+            --ink: #111418;
+            --ink-2: #2A2E35;
+            --ink-muted: #6E7278;
+            --ink-faint: #8A8F96;
+
+            /* Text on dark */
+            --snow: #F5F5F7;
+            --snow-muted: #A1A7B3;
+            --snow-faint: #7C8495;
+
+            /* Hairlines */
+            --hair-light: rgba(0,0,0,0.09);
+            --hair-light-2: rgba(0,0,0,0.055);
+            --hair-dark: rgba(255,255,255,0.12);
+            --hair-dark-2: rgba(255,255,255,0.07);
+
+            /* Flat fills */
+            --fill-dark: rgba(255,255,255,0.045);
+            --fill-dark-2: rgba(255,255,255,0.075);
+            --fill-blue-tint: rgba(37,99,235,0.07);
+
+            /* Shadows — very subtle */
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.045);
+            --shadow-md: 0 2px 8px rgba(0,0,0,0.055);
+            --shadow-lg: 0 8px 28px rgba(0,0,0,0.075);
+            --shadow-xl: 0 18px 48px rgba(0,0,0,0.10);
+
+            /* Radii — large product-card feel */
+            --radius: 14px;
+            --radius-lg: 22px;
+            --radius-xl: 28px;
+            --pill: 980px;
+
+            /* Spacing */
             --space-xs: 4px;
             --space-sm: 8px;
             --space-md: 16px;
@@ -298,778 +324,1009 @@
             --space-xl: 32px;
             --space-2xl: 48px;
             --space-3xl: 64px;
+
+            /* Section rhythm — enormous whitespace */
+            --band: clamp(96px, 11vw, 158px);
+
+            /* Motion */
+            --ease: cubic-bezier(0.16, 1, 0.30, 1);
+            --nav-h: 52px;
+            --sub-h: 52px;
         }
-        html { scroll-behavior: smooth; font-size: 16px; }
+
+        html { scroll-behavior: smooth; font-size: 16px; -webkit-text-size-adjust: 100%; }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            color: var(--dark);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--ink);
             background: var(--white);
-            line-height: 1.6;
+            line-height: 1.5;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            font-feature-settings: 'kern' 1, 'liga' 1;
         }
         a { text-decoration: none; color: inherit; }
         img { max-width: 100%; height: auto; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+        .container-wide { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
+        section { scroll-margin-top: calc(var(--nav-h) + var(--sub-h) + 8px); }
 
-        /* ===== NAVIGATION ===== */
-        nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            transition: all 0.3s ease;
+        /* ===== TYPOGRAPHY ===== */
+        .eyebrow {
+            display: block;
+            font-size: 1.0625rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--primary);
+            margin-bottom: 10px;
         }
-        nav.scrolled { background: rgba(15, 23, 42, 0.98); box-shadow: var(--shadow-lg); }
-        .nav-inner {
-            display: flex; align-items: center; justify-content: space-between;
-            max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 72px;
+        .band-dark .eyebrow { color: var(--primary-soft); }
+
+        .section-title {
+            font-size: clamp(2rem, 4.4vw, 3.5rem);
+            font-weight: 800;
+            letter-spacing: -0.032em;
+            line-height: 1.06;
+            color: var(--ink);
+            max-width: 20ch;
         }
-        .logo {
-            font-size: 1.5rem; font-weight: 800; color: var(--white);
-            letter-spacing: -0.5px;
-            display: flex; align-items: center; gap: 10px;
-            flex-shrink: 0;
+        .section-title.wide { max-width: 26ch; }
+        .band-dark .section-title { color: var(--white); }
+
+        .section-sub {
+            font-size: clamp(1.0625rem, 1.5vw, 1.3125rem);
+            font-weight: 400;
+            line-height: 1.5;
+            letter-spacing: -0.012em;
+            color: var(--ink-muted);
+            max-width: 46ch;
+            margin-top: 22px;
         }
-        .logo img { border-radius: 8px; flex-shrink: 0; }
-        .logo-text { white-space: nowrap; }
-        .logo span {
-            background: var(--gradient-accent);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .band-dark .section-sub { color: var(--snow-muted); }
+
+        .section-head { margin-bottom: clamp(56px, 7vw, 88px); }
+        .section-head.center { text-align: center; }
+        .section-head.center .section-title,
+        .section-head.center .section-sub { margin-left: auto; margin-right: auto; }
+
+        /* ===== BANDS — alternating light / near-black ===== */
+        .band { padding: var(--band) 0; }
+        .band-white { background: var(--white); }
+        .band-grey { background: var(--light); }
+        .band-dark { background: var(--dark); color: var(--snow); }
+
+        /* ===== BUTTONS — pill shaped, solid fills ===== */
+        .btn-primary,
+        .btn-secondary {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            font-family: inherit;
+            font-size: 1.0625rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            padding: 14px 26px;
+            border-radius: var(--pill);
+            cursor: pointer;
+            transition: background-color 0.3s var(--ease), color 0.3s var(--ease),
+                        border-color 0.3s var(--ease), transform 0.3s var(--ease);
+            border: 1px solid transparent;
+            white-space: nowrap;
         }
-        .nav-links { display: flex; align-items: center; gap: 32px; }
-        .nav-links a {
-            color: var(--gray-light); font-size: 0.9rem; font-weight: 500;
-            transition: color 0.2s;
+        .btn-primary { background: var(--primary); color: var(--white); }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border-color: rgba(37,99,235,0.35);
         }
-        .nav-links a:hover { color: var(--white); }
-        .nav-cta {
-            background: var(--gradient-accent) !important;
-            color: var(--white) !important;
-            padding: 10px 24px !important;
-            border-radius: 8px !important;
-            font-weight: 600 !important;
-            transition: transform 0.2s, box-shadow 0.2s !important;
-        }
-        .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.4); }
-        .nav-login {
-            background: rgba(255,255,255,0.05) !important;
-            border: 1px solid rgba(255,255,255,0.15) !important;
-            padding: 10px 24px !important;
-            border-radius: 8px !important;
-            font-weight: 600 !important;
-            transition: all 0.2s !important;
-        }
-        .nav-login:hover { background: rgba(255,255,255,0.1) !important; }
-        
-        /* Focus indicators for accessibility */
+        .btn-secondary:hover { background: var(--fill-blue-tint); border-color: var(--primary); }
+        .band-dark .btn-secondary { color: var(--primary-soft); border-color: rgba(255,255,255,0.22); }
+        .band-dark .btn-secondary:hover { background: var(--fill-dark-2); border-color: rgba(255,255,255,0.4); }
+
+        /* ===== ACCESSIBILITY ===== */
         a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
-            outline: 2px solid var(--accent);
-            outline-offset: 2px;
+            outline: 2px solid var(--primary);
+            outline-offset: 3px;
+            border-radius: 4px;
         }
         .skip-link {
             position: absolute; top: -100px; left: 16px;
             background: var(--primary); color: var(--white);
-            padding: 12px 20px; border-radius: 8px; z-index: 10000;
-            font-weight: 600; text-decoration: none;
+            padding: 12px 20px; border-radius: 8px; z-index: 10001;
+            font-weight: 600;
             transition: top 0.2s;
         }
         .skip-link:focus { top: 16px; }
-        .mobile-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
-        .mobile-toggle span { display: block; width: 24px; height: 2px; background: var(--white); margin: 5px 0; transition: 0.3s; }
-        .mobile-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-        .mobile-toggle.active span:nth-child(2) { opacity: 0; }
-        .mobile-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-        .nav-links.mobile-open {
-            display: flex !important;
-            flex-direction: column;
-            position: absolute;
-            top: 100%;
-            left: 0; right: 0;
-            background: var(--primary-dark);
-            padding: 20px;
-            gap: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            animation: slideDown 0.3s ease;
-        }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
 
-        /* ===== SPACING (standardized) ===== */
-        .hero {
-            background: var(--gradient-hero);
-            padding: var(--space-3xl) 0;
-            position: relative;
-            overflow: hidden;
+        /* ===== NAVIGATION — translucent, hairline appears on scroll ===== */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            height: var(--nav-h);
+            background: rgba(15, 23, 42, 0.72);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid transparent;
+            transition: background-color 0.4s var(--ease), border-color 0.4s var(--ease);
         }
-        .hero h1 {
-            color: var(--white);
+        nav.scrolled {
+            background: rgba(15, 23, 42, 0.88);
+            border-bottom-color: rgba(255,255,255,0.10);
+        }
+        .nav-inner {
+            display: flex; align-items: center; justify-content: space-between;
+            max-width: 1120px; margin: 0 auto; padding: 0 24px; height: var(--nav-h);
+        }
+        .logo {
+            font-size: 1.0625rem; font-weight: 700; color: var(--white);
+            letter-spacing: -0.025em;
+            display: flex; align-items: center; gap: 9px;
+            flex-shrink: 0;
+        }
+        .logo img { border-radius: 7px; flex-shrink: 0; }
+        .logo-text { white-space: nowrap; }
+        .logo span { color: var(--primary-soft); }
+        .nav-links { display: flex; align-items: center; gap: 26px; }
+        .nav-links a {
+            color: rgba(245,245,247,0.82);
+            font-size: 0.8125rem; font-weight: 400; letter-spacing: -0.005em;
+            transition: color 0.25s var(--ease);
+            white-space: nowrap;
+        }
+        .nav-links a:hover { color: var(--white); }
+        .nav-cta {
+            background: var(--primary);
+            color: var(--white) !important;
+            padding: 7px 16px;
+            border-radius: var(--pill);
+            font-weight: 500 !important;
+            transition: background-color 0.3s var(--ease) !important;
+        }
+        .nav-cta:hover { background: var(--primary-dark); }
+        .nav-login {
+            border: 1px solid rgba(255,255,255,0.22);
+            padding: 6px 15px;
+            border-radius: var(--pill);
+            transition: background-color 0.3s var(--ease), border-color 0.3s var(--ease) !important;
+        }
+        .nav-login:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.4); }
+
+        .mobile-toggle { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
+        .mobile-toggle span {
+            display: block; width: 20px; height: 1.5px;
+            background: var(--white); margin: 4px 0;
+            transition: transform 0.35s var(--ease), opacity 0.2s linear;
+        }
+        .mobile-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+        .mobile-toggle.active span:nth-child(2) { opacity: 0; }
+        .mobile-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
+
+        /* ===== IN-PAGE SUB-NAVIGATION ===== */
+        .subnav {
+            position: sticky; top: var(--nav-h); z-index: 900;
+            height: var(--sub-h);
+            background: rgba(255,255,255,0.80);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid var(--hair-light-2);
+        }
+        .subnav-inner {
+            max-width: 1120px; margin: 0 auto; padding: 0 24px;
+            height: var(--sub-h);
+            display: flex; align-items: center; justify-content: space-between; gap: 24px;
+        }
+        .subnav-brand {
+            font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.02em;
+            color: var(--ink); white-space: nowrap;
+        }
+        .subnav-links {
+            display: flex; align-items: center; gap: 28px;
+            overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        .subnav-links::-webkit-scrollbar { display: none; }
+        .subnav-links a {
+            font-size: 0.75rem; font-weight: 400;
+            color: var(--ink-muted); white-space: nowrap;
+            transition: color 0.25s var(--ease);
+        }
+        .subnav-links a:hover { color: var(--ink); }
+        .subnav-cta {
+            font-size: 0.75rem; font-weight: 500;
+            background: var(--primary); color: var(--white);
+            padding: 6px 14px; border-radius: var(--pill);
+            white-space: nowrap;
+            transition: background-color 0.3s var(--ease);
+        }
+        .subnav-cta:hover { background: var(--primary-dark); }
+
+        /* ===== HERO — full bleed, typography as the hero ===== */
+        .hero {
+            background: var(--dark);
+            color: var(--snow);
+            padding: calc(var(--nav-h) + clamp(88px, 13vw, 170px)) 0 clamp(80px, 10vw, 130px);
+            text-align: center;
         }
         .hero-badge {
             display: inline-block;
-            background: rgba(37,99,235,0.15);
-            color: #60A5FA;
+            color: var(--primary-soft);
+            font-size: 0.9375rem; font-weight: 500; letter-spacing: -0.005em;
             padding: 6px 16px;
-            border-radius: 100px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: var(--pill);
+            margin-bottom: 30px;
         }
-        .hero-inner {
-            display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2xl);
-            align-items: center; position: relative; z-index: 1;
-        }
-        .hero p {
-            font-size: 1.125rem; color: var(--gray-light);
-            margin-bottom: var(--space-xl); line-height: 1.7; max-width: 540px;
-        }
-        .hero-buttons { display: flex; gap: var(--space-md); flex-wrap: wrap; }
-        .btn-primary {
-            background: var(--gradient-accent);
+        .hero h1 {
             color: var(--white);
-            padding: var(--space-md) var(--space-xl);
-            border-radius: var(--radius);
-            font-weight: 600; font-size: 1rem;
-            border: none; cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex; align-items: center; gap: var(--space-sm);
+            font-size: clamp(2.6rem, 7.4vw, 5.5rem);
+            font-weight: 800;
+            letter-spacing: -0.038em;
+            line-height: 1.02;
+            max-width: 17ch;
+            margin: 0 auto;
         }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-        .btn-secondary {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.15);
-            color: var(--white);
-            padding: var(--space-md) var(--space-xl);
-            border-radius: var(--radius);
-            font-weight: 600; font-size: 1rem;
-            cursor: pointer; transition: all 0.2s ease;
-            display: inline-flex; align-items: center; gap: var(--space-sm);
+        .hero h1 .highlight { color: var(--primary-soft); }
+        .hero-lede {
+            font-size: clamp(1.0625rem, 1.65vw, 1.375rem);
+            font-weight: 400;
+            line-height: 1.52;
+            letter-spacing: -0.015em;
+            color: var(--snow-muted);
+            max-width: 54ch;
+            margin: 30px auto 0;
         }
-        .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
-        .hero-visual {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: var(--radius-lg);
-            padding: 32px;
-            backdrop-filter: blur(10px);
+        .hero-detail {
+            font-size: 0.9375rem; line-height: 1.6;
+            color: var(--snow-faint);
+            max-width: 72ch; margin: 22px auto 0;
         }
-        .hero-stats {
-            display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg);
-        }
-        .hero-stat {
-            text-align: center; padding: 20px;
-            background: rgba(255,255,255,0.03);
-            border-radius: var(--radius);
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .hero-stat .number {
-            font-size: 2.25rem; font-weight: 800;
-            background: var(--gradient-accent);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            display: block;
-        }
-        .hero-stat .label {
-            font-size: 0.875rem; color: var(--gray-light);
-            margin-top: 4px; font-weight: 500;
+        .hero-buttons {
+            display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+            margin-top: 40px;
         }
 
-        /* ===== SOCIAL PROOF BAR ===== */
-        .proof-bar {
-            background: var(--light);
-            padding: 40px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+        /* ===== STAT STRIP — one big figure, small caption ===== */
+        .stat-strip {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            margin-top: clamp(64px, 8vw, 104px);
+            border-top: 1px solid var(--hair-dark-2);
+            border-bottom: 1px solid var(--hair-dark-2);
         }
-        .proof-inner {
+        .stat {
+            padding: 44px 20px;
+            text-align: center;
+            position: relative;
+        }
+        .stat + .stat::before {
+            content: ''; position: absolute; left: 0; top: 22%; bottom: 22%;
+            width: 1px; background: var(--hair-dark-2);
+        }
+        .stat .figure {
+            display: block;
+            font-size: clamp(2.5rem, 4.6vw, 3.75rem);
+            font-weight: 800; letter-spacing: -0.04em; line-height: 1;
+            color: var(--white);
+            white-space: nowrap;
+        }
+        .stat .caption {
+            display: block; margin-top: 14px;
+            font-size: 0.8125rem; font-weight: 400; line-height: 1.5;
+            color: var(--snow-faint);
+        }
+
+        /* ===== SOCIAL PROOF ===== */
+        .proof-bar {
+            background: var(--white);
+            padding: 56px 0;
+            border-bottom: 1px solid var(--hair-light-2);
             text-align: center;
         }
-        .proof-inner p {
-            font-size: 0.85rem; color: var(--gray);
-            font-weight: 600; text-transform: uppercase;
-            letter-spacing: 2px; margin-bottom: var(--space-md);
+        .proof-bar p {
+            font-size: 0.8125rem; font-weight: 600;
+            color: var(--ink-faint);
+            text-transform: uppercase; letter-spacing: 0.08em;
+            margin-bottom: 26px;
         }
         .proof-logos {
             display: flex; align-items: center; justify-content: center;
-            gap: 48px; flex-wrap: wrap; opacity: 0.5;
+            gap: 14px; flex-wrap: wrap;
         }
         .proof-logo {
-            font-size: 1.1rem; font-weight: 700; color: var(--dark-light);
-        }
-
-        /* ===== PROBLEM SECTION ===== */
-        .problem {
-            padding: 120px 0;
+            font-size: 0.875rem; font-weight: 500; letter-spacing: -0.01em;
+            color: var(--ink-2);
+            padding: 8px 18px;
+            border: 1px solid var(--hair-light);
+            border-radius: var(--pill);
             background: var(--white);
         }
-        .section-label {
-            display: inline-block; font-size: 0.875rem; font-weight: 700;
-            color: var(--primary); text-transform: uppercase;
-            letter-spacing: 2px; margin-bottom: 16px;
+
+        /* ===== CARD PRIMITIVES — large radii, hairline borders ===== */
+        .card {
+            background: var(--white);
+            border: 1px solid var(--hair-light);
+            border-radius: var(--radius-xl);
+            padding: clamp(28px, 3.4vw, 44px);
+            transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease), border-color 0.5s var(--ease), background-color 0.5s var(--ease);
         }
-        .section-title {
-            font-size: 2.5rem; font-weight: 800; color: var(--dark);
-            margin-bottom: 20px; letter-spacing: -1px; line-height: 1.2;
+        .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        .band-grey .card { background: var(--white); border-color: transparent; box-shadow: var(--shadow-sm); }
+        .band-dark .card {
+            background: var(--fill-dark);
+            border-color: var(--hair-dark-2);
         }
-        .section-subtitle {
-            font-size: 1.15rem; color: var(--gray);
-            max-width: 640px; line-height: 1.7;
+        .band-dark .card:hover { background: var(--fill-dark-2); border-color: var(--hair-dark); box-shadow: none; }
+
+        .card h3 {
+            font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+            font-weight: 700; letter-spacing: -0.024em; line-height: 1.18;
+            color: var(--ink);
+            margin-bottom: 14px;
         }
+        .band-dark .card h3 { color: var(--white); }
+        .card p {
+            font-size: 0.9375rem; line-height: 1.62; letter-spacing: -0.005em;
+            color: var(--ink-muted);
+        }
+        .band-dark .card p { color: var(--snow-muted); }
+
+        .card-figure {
+            display: block;
+            font-size: 0.75rem; font-weight: 600;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--ink-faint);
+            margin-bottom: 20px;
+        }
+        .band-dark .card-figure { color: var(--snow-faint); }
+
+        /* ===== PROBLEM ===== */
         .problem-grid {
             display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 32px; margin-top: 60px;
-        }
-        .problem-card {
-            padding: 36px;
-            background: var(--light);
-            border-radius: var(--radius);
-            border: 1px solid rgba(0,0,0,0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .problem-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-        }
-        .problem-icon {
-            font-size: 2.5rem; margin-bottom: 20px;
-            display: block;
-        }
-        .problem-card h3 {
-            font-size: 1.2rem; font-weight: 700;
-            color: var(--dark); margin-bottom: 12px;
-        }
-        .problem-card p {
-            font-size: 0.95rem; color: var(--gray);
-            line-height: 1.6;
+            gap: 20px;
         }
 
-        /* ===== SOLUTION / SERVICES ===== */
-        .services {
-            padding: 120px 0;
-            background: var(--dark);
-            color: var(--white);
-        }
-        .services .section-title { color: var(--white); }
-        .services .section-subtitle { color: var(--gray-light); }
+        /* ===== SERVICES ===== */
         .services-grid {
             display: grid; grid-template-columns: repeat(2, 1fr);
-            gap: 32px; margin-top: 60px;
+            gap: 20px;
         }
-        .service-card {
-            padding: 40px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: var(--radius-lg);
-            transition: all 0.3s;
+        .service-card.featured { background: var(--fill-blue-tint); border-color: rgba(37,99,235,0.28); }
+        .band-dark .service-card.featured { background: rgba(37,99,235,0.12); border-color: rgba(37,99,235,0.35); }
+        .service-card.span-2 { grid-column: span 2; }
+        .feature-list { list-style: none; padding: 0; margin: 26px 0 0; }
+        .feature-list li {
+            font-size: 0.875rem; line-height: 1.55;
+            color: var(--ink-2);
+            padding: 9px 0 9px 28px;
+            position: relative;
+            border-top: 1px solid var(--hair-light-2);
         }
-        .service-card:hover {
-            background: rgba(255,255,255,0.06);
-            border-color: rgba(37,99,235,0.3);
-            transform: translateY(-4px);
-        }
-        .service-card.featured {
-            border-color: rgba(37,99,235,0.4);
-            background: rgba(37,99,235,0.08);
-        }
-        .service-number {
-            font-size: 3rem; font-weight: 900;
-            background: var(--gradient-accent);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 16px;
-            display: block;
-        }
-        .service-card h3 {
-            font-size: 1.4rem; font-weight: 700;
-            margin-bottom: 16px; color: var(--white);
-        }
-        .service-card p {
-            font-size: 0.95rem; color: var(--gray-light);
-            line-height: 1.7; margin-bottom: 20px;
-        }
-        .service-features {
-            list-style: none; padding: 0;
-        }
-        .service-features li {
-            font-size: 0.9rem; color: var(--gray-light);
-            padding: 6px 0;
-            display: flex; align-items: center; gap: 10px;
-        }
-        .service-features li::before {
+        .feature-list li:first-child { border-top: none; }
+        .feature-list li::before {
             content: '✓';
-            color: var(--accent);
-            font-weight: 700;
-            font-size: 0.85rem;
-            width: 20px; height: 20px;
-            display: flex; align-items: center; justify-content: center;
-            background: rgba(16,185,129,0.15);
-            border-radius: 50%;
-            flex-shrink: 0;
+            position: absolute; left: 0; top: 9px;
+            font-size: 0.75rem; font-weight: 700;
+            color: var(--primary);
         }
+        .band-dark .feature-list li { color: var(--snow-muted); border-top-color: var(--hair-dark-2); }
+        .band-dark .feature-list li::before { color: var(--primary-soft); }
+
+        /* ===== AUDIT ===== */
+        .audit-grid {
+            display: grid; grid-template-columns: 1.1fr 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+        .audit-h {
+            font-size: 1.125rem; font-weight: 700; letter-spacing: -0.02em;
+            color: var(--ink);
+            margin: 0 0 22px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--hair-light);
+        }
+        .audit-list { list-style: none; margin: 0; padding: 0; }
+        .audit-list li {
+            position: relative;
+            padding: 14px 0 14px 30px;
+            font-size: 0.9375rem; line-height: 1.6;
+            color: var(--ink-muted);
+            border-top: 1px solid var(--hair-light-2);
+        }
+        .audit-list li:first-child { border-top: none; }
+        .audit-list li::before {
+            content: '\2713';
+            position: absolute; left: 0; top: 15px;
+            font-size: 0.75rem; font-weight: 700;
+            color: var(--primary);
+        }
+        .audit-list.audit-outcomes li::before { color: var(--ink); }
+        .audit-list li strong { color: var(--ink); font-weight: 600; }
+        .audit-note {
+            margin-top: 28px;
+            padding: 22px 24px;
+            background: var(--light);
+            border: 1px solid var(--hair-light-2);
+            border-radius: var(--radius);
+            font-size: 0.9375rem; line-height: 1.6;
+            color: var(--ink-muted);
+        }
+        .audit-note strong { color: var(--ink); font-weight: 600; }
 
         /* ===== HOW IT WORKS ===== */
-        .how-it-works {
-            padding: 120px 0;
-            background: var(--white);
-        }
         .steps {
             display: grid; grid-template-columns: repeat(4, 1fr);
-            gap: 32px; margin-top: 60px;
+            gap: 20px;
         }
         .step {
-            text-align: center; padding: 32px 20px;
-            position: relative;
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: clamp(28px, 3vw, 40px);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
         }
+        .step:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
         .step-number {
-            width: 64px; height: 64px;
-            background: var(--gradient-accent);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; font-weight: 800; color: var(--white);
-            margin: 0 auto 20px;
+            display: block;
+            font-size: 3.25rem; font-weight: 800;
+            letter-spacing: -0.05em; line-height: 1;
+            color: var(--ink);
+            margin-bottom: 24px;
+        }
+        .step-week {
+            display: block; margin-bottom: 8px;
+            font-size: 0.6875rem; font-weight: 600;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--primary);
         }
         .step h3 {
-            font-size: 1.1rem; font-weight: 700;
-            margin-bottom: 12px; color: var(--dark);
+            font-size: 1.125rem; font-weight: 700; letter-spacing: -0.02em;
+            color: var(--ink); margin-bottom: 12px;
         }
-        .step p {
-            font-size: 0.9rem; color: var(--gray);
-            line-height: 1.6;
-        }
+        .step p { font-size: 0.875rem; line-height: 1.6; color: var(--ink-muted); }
 
-        /* ===== COMPARISON TABLE ===== */
-        .comparison {
-            padding: 120px 0;
-            background: var(--light);
-        }
+        /* ===== COMPARISON — clean, minimal, generous ===== */
         .comparison-wrapper {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            margin: 0 -16px;
-            padding: 0 16px;
         }
         .comparison-table {
-            width: 100%; margin-top: 60px;
-            border-collapse: separate; border-spacing: 0;
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-lg);
+            width: 100%;
+            min-width: 760px;
+            border-collapse: collapse;
+            text-align: left;
         }
         .comparison-table thead th {
-            padding: 24px 20px;
-            font-size: 0.9rem; font-weight: 700;
-            text-align: center;
-            border-bottom: 2px solid var(--light);
+            padding: 0 24px 22px;
+            font-size: 0.875rem; font-weight: 600; letter-spacing: -0.01em;
+            color: var(--ink);
+            vertical-align: bottom;
+            border-bottom: 1px solid var(--hair-light);
         }
-        .comparison-table thead th:first-child { text-align: left; }
-        .comparison-table thead th.highlight-col {
-            background: var(--primary);
-            color: var(--white);
+        .comparison-table thead th small {
+            display: block; margin-top: 5px;
+            font-size: 0.75rem; font-weight: 400;
+            color: var(--ink-faint);
         }
+        .comparison-table thead th.highlight-col { color: var(--primary); }
+        .comparison-table thead th.highlight-col small { color: var(--primary); opacity: 0.7; }
         .comparison-table tbody td {
-            padding: 18px 20px;
-            font-size: 0.9rem;
-            border-bottom: 1px solid var(--light);
-            text-align: center;
+            padding: 24px;
+            font-size: 0.9375rem; letter-spacing: -0.005em;
+            color: var(--ink-muted);
+            border-bottom: 1px solid var(--hair-light-2);
+            vertical-align: top;
         }
         .comparison-table tbody td:first-child {
-            text-align: left; font-weight: 600; color: var(--dark);
+            font-weight: 600; color: var(--ink);
+        }
+        .comparison-table tbody td.highlight-col {
+            background: var(--light-2);
+            color: var(--ink-2);
         }
         .comparison-table tbody tr:last-child td { border-bottom: none; }
-        .comparison-table tbody tr:hover { background: rgba(37,99,235,0.02); }
-        .check { color: var(--accent); font-weight: 700; font-size: 1.2rem; }
-        .cross { color: var(--gray-light); font-size: 1.2rem; }
-        .partial { color: #F59E0B; font-size: 1.2rem; }
-        .comparison-table { min-width: 700px; }
-        @media (max-width: 768px) {
-            .comparison-wrapper {
-                margin: 0 -12px;
-                padding: 0 12px;
-            }
-            .comparison-table thead th,
-            .comparison-table tbody td {
-                padding: 14px 12px;
-                font-size: 0.875rem;
-            }
-        }
-
-        /* ===== SUPPLIER INVOICE & CONTRACT AUDIT ===== */
-        .audit {
-            padding: 88px 0;
-            background: var(--off-white, #F8FAFC);
-        }
-        .audit-grid {
-            display: grid;
-            grid-template-columns: 1.15fr 1fr;
-            gap: 40px;
-            margin-top: 40px;
-            text-align: left;
-        }
-        .audit-h {
-            font-size: 1.15rem;
-            color: var(--primary, #2563EB);
-            margin: 0 0 16px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--primary, #2563EB);
-        }
-        .audit-list {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        .audit-list li {
-            position: relative;
-            padding: 0 0 14px 30px;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: var(--text-muted, #475569);
-        }
-        .audit-list li::before {
-            content: "\2713";
-            position: absolute;
-            left: 0;
-            top: 1px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--accent, #10B981);
-            color: #fff;
-            font-size: 0.72rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .audit-list.audit-outcomes li::before {
-            background: var(--primary, #2563EB);
-        }
-        .audit-list li strong { color: var(--dark, #0F172A); }
-        .audit-note {
-            margin-top: 22px;
-            padding: 20px 22px;
-            border-left: 4px solid var(--accent, #10B981);
-            background: #fff;
-            border-radius: 0 10px 10px 0;
-            font-size: 0.92rem;
-            line-height: 1.65;
-            color: var(--text-muted, #475569);
-        }
-        .audit-note strong { color: var(--dark, #0F172A); }
-        @media (max-width: 860px) {
-            .audit-grid { grid-template-columns: 1fr; gap: 32px; }
-        }
-
-        /* ===== BILLING PAUSED NOTICE ===== */
-        .billing-paused {
-            max-width: 760px;
-            margin: 26px auto 0;
-            padding: 16px 22px;
-            background: #FFF7ED;
-            border: 1px solid #FED7AA;
-            border-left: 4px solid #F59E0B;
-            border-radius: 0 10px 10px 0;
-            text-align: left;
-            font-size: 0.94rem;
-            line-height: 1.6;
-            color: #7C2D12;
-        }
-        .billing-paused strong { color: #7C2D12; }
-        .billing-paused a { color: #B45309; font-weight: 600; text-decoration: underline; }
+        .comparison-table thead th.highlight-col,
+        .comparison-table tbody td.highlight-col { border-left: 1px solid var(--hair-light-2); }
+        .check { color: var(--primary); font-weight: 700; margin-right: 4px; }
+        .cross { color: var(--ink-faint); margin-right: 4px; }
+        .partial { color: var(--ink-faint); margin-right: 4px; }
 
         /* ===== PRICING ===== */
-        .pricing {
-            padding: 120px 0;
-            background: var(--white);
-        }
         .pricing-grid {
             display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 32px; margin-top: 60px;
-            align-items: start;
+            gap: 20px; align-items: stretch;
         }
         .pricing-card {
-            padding: 40px 32px;
-            border-radius: var(--radius-lg);
-            border: 2px solid var(--light);
-            transition: all 0.3s;
-            position: relative;
+            background: var(--white);
+            border: 1px solid var(--hair-light);
+            border-radius: var(--radius-xl);
+            padding: clamp(28px, 3.2vw, 42px);
+            display: flex; flex-direction: column;
+            text-align: left;
+            transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease), border-color 0.5s var(--ease);
         }
-        .pricing-card:hover {
-            border-color: rgba(37,99,235,0.2);
-            box-shadow: var(--shadow-xl);
-        }
-        .pricing-card.popular {
-            border-color: var(--primary);
-            transform: scale(1.05);
-            box-shadow: var(--shadow-xl);
-        }
-        .pricing-card.popular::before {
-            content: 'MOST POPULAR';
-            position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
-            background: var(--gradient-accent);
-            color: var(--white);
-            padding: 4px 20px;
-            border-radius: 100px;
-            font-size: 0.7rem;
-            font-weight: 800;
-            letter-spacing: 1px;
+        .pricing-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        .pricing-card.popular { border-color: var(--primary); box-shadow: var(--shadow-md); }
+        .pricing-badge {
+            display: inline-block; align-self: flex-start;
+            font-size: 0.6875rem; font-weight: 700;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 14px;
         }
         .pricing-card h3 {
-            font-size: 1.2rem; font-weight: 700;
-            color: var(--dark); margin-bottom: 8px;
+            font-size: 1.3125rem; font-weight: 700; letter-spacing: -0.024em;
+            color: var(--ink); margin-bottom: 6px;
         }
         .pricing-card .price {
-            font-size: 3rem; font-weight: 900;
-            color: var(--dark); margin: 20px 0 8px;
+            font-size: clamp(2.75rem, 4.2vw, 3.5rem);
+            font-weight: 800; letter-spacing: -0.045em; line-height: 1;
+            color: var(--ink);
+            margin: 24px 0 10px;
+            white-space: nowrap;
         }
         .pricing-card .price span {
-            font-size: 1rem; font-weight: 500;
-            color: var(--gray);
+            font-size: 1.0625rem; font-weight: 500; letter-spacing: -0.01em;
+            color: var(--ink-faint);
         }
         .pricing-card .price-desc {
-            font-size: 0.85rem; color: var(--gray);
-            margin-bottom: var(--space-md);
+            font-size: 0.875rem; color: var(--ink-muted);
+            margin-bottom: 28px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid var(--hair-light-2);
         }
-        .roi-note {
-            max-width: 720px; margin: 48px auto 0;
-            padding: 24px 28px;
-            background: var(--light);
-            border-left: 4px solid var(--accent);
-            border-radius: var(--radius);
-            font-size: 0.95rem; line-height: 1.7;
-            color: var(--dark-light); text-align: left;
-        }
-        .roi-note strong { color: var(--dark); }
-        .pricing-card ul {
-            list-style: none; padding: 0; margin-bottom: 32px;
-        }
+        .pricing-card ul { list-style: none; padding: 0; margin: 0 0 32px; }
         .pricing-card ul li {
-            padding: 8px 0;
-            font-size: 0.9rem; color: var(--dark-light);
-            display: flex; align-items: center; gap: 10px;
+            padding: 8px 0 8px 26px;
+            position: relative;
+            font-size: 0.875rem; line-height: 1.55;
+            color: var(--ink-2);
         }
         .pricing-card ul li::before {
             content: '✓';
-            color: var(--accent);
-            font-weight: 700;
-        }
-        .pricing-btn {
-            width: 100%; padding: 14px;
-            border-radius: 10px; font-weight: 700;
-            font-size: 0.95rem; cursor: pointer;
-            transition: all 0.2s;
-            border: 2px solid var(--primary);
-            background: transparent;
+            position: absolute; left: 0; top: 8px;
+            font-size: 0.75rem; font-weight: 700;
             color: var(--primary);
         }
-        .pricing-btn:hover { background: var(--primary); color: var(--white); }
+        .pricing-btn {
+            margin-top: auto;
+            width: 100%; padding: 14px;
+            border-radius: var(--pill);
+            font-family: inherit;
+            font-weight: 500; font-size: 1rem; letter-spacing: -0.01em;
+            cursor: pointer;
+            border: 1px solid rgba(37,99,235,0.35);
+            background: transparent;
+            color: var(--primary);
+            transition: background-color 0.3s var(--ease), color 0.3s var(--ease), border-color 0.3s var(--ease);
+        }
+        .pricing-btn:hover { background: var(--fill-blue-tint); border-color: var(--primary); }
         .pricing-card.popular .pricing-btn {
-            background: var(--primary);
-            color: var(--white);
+            background: var(--primary); color: var(--white); border-color: var(--primary);
         }
-        .pricing-card.popular .pricing-btn:hover {
-            background: var(--primary-dark);
+        .pricing-card.popular .pricing-btn:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+
+        .billing-paused {
+            max-width: 720px;
+            margin: 0 auto clamp(48px, 6vw, 72px);
+            padding: 20px 24px;
+            background: var(--white);
+            border: 1px solid var(--hair-light);
+            border-radius: var(--radius);
+            text-align: left;
+            font-size: 0.9375rem; line-height: 1.6;
+            color: var(--ink-muted);
+            box-shadow: var(--shadow-sm);
         }
+        .billing-paused strong { color: var(--ink); font-weight: 600; }
+        .billing-paused a { color: var(--primary); font-weight: 500; }
+        .billing-paused a:hover { text-decoration: underline; }
+
+        .roi-note {
+            max-width: 720px;
+            margin: clamp(56px, 6vw, 80px) auto 0;
+            padding: 32px 34px;
+            background: var(--white);
+            border: 1px solid var(--hair-light);
+            border-radius: var(--radius-lg);
+            font-size: 1.0625rem; line-height: 1.6; letter-spacing: -0.012em;
+            color: var(--ink-muted);
+            text-align: left;
+            box-shadow: var(--shadow-sm);
+        }
+        .roi-note strong { color: var(--ink); font-weight: 700; }
 
         /* ===== TESTIMONIALS ===== */
-        .testimonials {
-            padding: 120px 0;
-            background: var(--dark);
-            color: var(--white);
-        }
-        .testimonials .section-title { color: var(--white); }
-        .testimonials .section-subtitle { color: var(--gray-light); }
         .testimonial-grid {
             display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 32px; margin-top: 60px;
+            gap: 20px;
         }
         .testimonial-card {
-            padding: 32px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: var(--radius);
+            background: var(--fill-dark);
+            border: 1px solid var(--hair-dark-2);
+            border-radius: var(--radius-xl);
+            padding: clamp(28px, 3vw, 40px);
+            display: flex; flex-direction: column;
+            text-align: left;
+            transition: background-color 0.5s var(--ease), border-color 0.5s var(--ease), transform 0.5s var(--ease);
         }
+        .testimonial-card:hover { background: var(--fill-dark-2); border-color: var(--hair-dark); transform: translateY(-3px); }
         .testimonial-stars {
-            color: #F59E0B; font-size: 1.1rem;
-            margin-bottom: 16px;
+            color: var(--primary-soft); font-size: 0.8125rem; letter-spacing: 0.14em;
+            margin-bottom: 22px;
         }
         .testimonial-card blockquote {
-            font-size: 0.95rem; color: var(--gray-light);
-            line-height: 1.7; margin-bottom: var(--space-md);
-            font-style: italic;
+            font-size: 1.0625rem; line-height: 1.5; letter-spacing: -0.016em;
+            color: var(--white);
+            font-weight: 500;
+            margin-bottom: 28px;
+            flex: 1;
         }
         .testimonial-author {
             display: flex; align-items: center; gap: 12px;
+            padding-top: 22px;
+            border-top: 1px solid var(--hair-dark-2);
         }
         .testimonial-avatar {
-            width: 44px; height: 44px;
-            background: var(--gradient-accent);
+            width: 40px; height: 40px; flex-shrink: 0;
+            background: rgba(255,255,255,0.1);
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-weight: 700; color: var(--white);
-            font-size: 0.9rem;
+            font-weight: 600; color: var(--white);
+            font-size: 0.8125rem; letter-spacing: -0.01em;
         }
-        .testimonial-name {
-            font-weight: 600; font-size: 0.9rem; color: var(--white);
-        }
-        .testimonial-role {
-            font-size: 0.875rem; color: var(--gray-light);
-        }
+        .testimonial-name { font-weight: 600; font-size: 0.875rem; color: var(--white); }
+        .testimonial-role { font-size: 0.8125rem; color: var(--snow-faint); margin-top: 2px; }
 
         /* ===== FAQ ===== */
-        .faq {
-            padding: 120px 0;
-            background: var(--white);
-        }
-        .faq-list {
-            max-width: 800px; margin: 60px auto 0;
-        }
-        .faq-item {
-            border-bottom: 1px solid var(--light);
-        }
+        .faq-list { max-width: 820px; margin: 0 auto; }
+        .faq-item { border-bottom: 1px solid var(--hair-light); }
+        .faq-item:first-child { border-top: 1px solid var(--hair-light); }
         .faq-question {
-            width: 100%; padding: 24px 0;
+            width: 100%; padding: 28px 44px 28px 0;
             background: none; border: none;
-            font-size: 1.05rem; font-weight: 600;
-            color: var(--dark); cursor: pointer;
-            display: flex; justify-content: space-between;
-            align-items: center; text-align: left;
             font-family: inherit;
+            font-size: 1.125rem; font-weight: 600; letter-spacing: -0.018em;
+            color: var(--ink); cursor: pointer;
+            text-align: left;
+            position: relative;
+            transition: color 0.25s var(--ease);
         }
+        .faq-question:hover { color: var(--primary); }
         .faq-question::after {
             content: '+';
-            font-size: 1.5rem; font-weight: 300;
+            position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
+            font-size: 1.625rem; font-weight: 300;
             color: var(--primary);
-            transition: transform 0.3s;
+            line-height: 1;
         }
-        .faq-question.active::after {
-            content: '−';
-        }
+        .faq-question.active::after { content: '−'; }
         .faq-answer {
             max-height: 0; overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
+            transition: max-height 0.5s var(--ease), padding 0.4s var(--ease);
         }
-        .faq-answer.open {
-            max-height: 300px;
-            padding-bottom: 24px;
-        }
+        .faq-answer.open { max-height: 460px; padding-bottom: 30px; }
         .faq-answer p {
-            font-size: 0.95rem; color: var(--gray);
-            line-height: 1.7;
+            font-size: 1.0625rem; line-height: 1.6; letter-spacing: -0.012em;
+            color: var(--ink-muted);
+            max-width: 68ch;
         }
+        .faq-answer p strong { color: var(--ink); font-weight: 600; }
 
-        /* ===== CTA SECTION ===== */
-        .cta-section {
-            padding: 120px 0;
-            background: var(--gradient-hero);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .cta-section::before {
-            content: '';
-            position: absolute; top: -50%; left: 50%;
-            transform: translateX(-50%);
-            width: 800px; height: 800px;
-            background: rgba(37,99,235,0.10);
-            border-radius: 50%;
-        }
-        .cta-content { position: relative; z-index: 1; }
+        /* ===== CTA ===== */
+        .cta-section { text-align: center; }
         .cta-section h2 {
-            font-size: 2.8rem; font-weight: 900;
-            color: var(--white); margin-bottom: 20px;
-            letter-spacing: -1px;
+            font-size: clamp(2.1rem, 5vw, 4rem);
+            font-weight: 800; letter-spacing: -0.035em; line-height: 1.04;
+            color: var(--white);
+            max-width: 22ch; margin: 0 auto;
         }
         .cta-section p {
-            font-size: 1.15rem; color: var(--gray-light);
-            margin-bottom: 40px; max-width: 600px;
-            margin-left: auto; margin-right: auto;
+            font-size: clamp(1.0625rem, 1.5vw, 1.3125rem);
+            line-height: 1.5; letter-spacing: -0.014em;
+            color: var(--snow-muted);
+            max-width: 56ch;
+            margin: 26px auto 0;
+        }
+        .cta-buttons {
+            display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        .cta-fine {
+            margin-top: 26px;
+            font-size: 0.8125rem; color: var(--snow-faint);
         }
 
         /* ===== FOOTER ===== */
         footer {
-            background: var(--dark);
-            padding: 60px 0 30px;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            background: var(--light);
+            padding: 72px 0 40px;
+            border-top: 1px solid var(--hair-light-2);
         }
         .footer-grid {
             display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 48px; margin-bottom: 48px;
+            gap: 48px; padding-bottom: 44px;
+            border-bottom: 1px solid var(--hair-light);
         }
-        .footer-brand .logo { margin-bottom: 16px; display: block; }
+        .footer-brand .logo { color: var(--ink); margin-bottom: 14px; }
+        .footer-brand .logo span { color: var(--primary); }
         .footer-brand p {
-            font-size: 0.9rem; color: var(--gray-light);
-            line-height: 1.6;
+            font-size: 0.8125rem; color: var(--ink-muted);
+            line-height: 1.6; max-width: 40ch;
         }
         .footer-col h4 {
-            font-size: 0.85rem; font-weight: 700;
-            color: var(--white); text-transform: uppercase;
-            letter-spacing: 1px; margin-bottom: 20px;
+            font-size: 0.75rem; font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 14px;
         }
         .footer-col a {
-            display: block; font-size: 0.9rem;
-            color: var(--gray-light); padding: 6px 0;
-            transition: color 0.2s;
+            display: block; font-size: 0.75rem;
+            color: var(--ink-muted); padding: 5px 0;
+            transition: color 0.25s var(--ease);
         }
-        .footer-col a:hover { color: var(--white); }
+        .footer-col a:hover { color: var(--ink); text-decoration: underline; }
         .footer-bottom {
-            border-top: 1px solid rgba(255,255,255,0.05);
             padding-top: 24px;
             display: flex; justify-content: space-between;
+            align-items: center; gap: 12px; flex-wrap: wrap;
+            font-size: 0.75rem; color: var(--ink-faint);
+        }
+
+        /* ===== SCROLL REVEAL (JS-gated so no-JS still shows everything) ===== */
+        .reveal-ready {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+            will-change: opacity, transform;
+        }
+        .reveal-ready.is-visible { opacity: 1; transform: translateY(0); }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            .reveal-ready { opacity: 1 !important; transform: none !important; transition: none !important; }
+        }
+
+        /* ===== CONTACT MODAL (class names preserved) ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(6, 27, 49, 0.8);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: flex;
             align-items: center;
-            font-size: 0.875rem; color: var(--gray);
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 22px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.30, 1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(0,0,0,0.09);
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.024em;
+            color: #111418;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.75rem;
+            color: #6E7278;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            background: #F5F5F7;
+            color: #111418;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: #2A2E35;
+            margin-bottom: 7px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1px solid rgba(0,0,0,0.14);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s;
+            background: #FAFAFC;
+            color: #111418;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #8A8F96;
+        }
+
+        .form-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 980px;
+            font-size: 1.0625rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 8px;
+        }
+
+        .btn-submit:hover {
+            background: #1D4ED8;
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #formStatus.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        #formStatus.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
         }
 
         /* ===== RESPONSIVE ===== */
+        @media (max-width: 1100px) {
+            .nav-links { gap: 18px; }
+            .nav-links a { font-size: 0.78125rem; }
+            .subnav-links { gap: 20px; }
+        }
         @media (max-width: 1024px) {
-            .hero h1 { font-size: 2.8rem; color: var(--white); }
-            .hero-inner { grid-template-columns: 1fr; gap: 40px; }
             .problem-grid { grid-template-columns: 1fr; }
             .services-grid { grid-template-columns: 1fr; }
+            .service-card.span-2 { grid-column: auto; }
+            .audit-grid { grid-template-columns: 1fr; }
             .steps { grid-template-columns: repeat(2, 1fr); }
-            .pricing-grid { grid-template-columns: 1fr; max-width: 500px; margin-left: auto; margin-right: auto; }
-            .pricing-card.popular { transform: none; }
-            .testimonial-grid { grid-template-columns: 1fr; }
-            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 520px; margin: 0 auto; }
+            .testimonial-grid { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+            .stat-strip { grid-template-columns: repeat(2, 1fr); }
+            .stat + .stat::before { display: none; }
+            .stat:nth-child(n+3) { border-top: 1px solid var(--hair-dark-2); }
+            .stat:nth-child(even) { border-left: 1px solid var(--hair-dark-2); }
+        }
+        @media (max-width: 860px) {
+            .subnav-brand { display: none; }
+        }
+        @media (max-width: 768px) {
+            :root { --nav-h: 48px; --sub-h: 48px; }
+            .nav-inner { padding: 0 20px; }
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: var(--nav-h); left: 0; right: 0;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0;
+                background: rgba(15, 23, 42, 0.98);
+                -webkit-backdrop-filter: blur(20px);
+                backdrop-filter: blur(20px);
+                padding: 16px 20px 28px;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                max-height: calc(100vh - var(--nav-h));
+                overflow-y: auto;
+            }
+            .nav-links.mobile-open { display: flex; animation: slideDown 0.35s cubic-bezier(0.16, 1, 0.30, 1); }
+            .nav-links a {
+                font-size: 1.0625rem; font-weight: 400;
+                padding: 13px 0;
+                border-bottom: 1px solid rgba(255,255,255,0.07);
+            }
+            .nav-links a.nav-login,
+            .nav-links a.nav-cta {
+                text-align: center; margin-top: 14px; border-bottom: none;
+                padding: 12px 20px; font-size: 1rem;
+            }
+            .mobile-toggle { display: block; }
+            .subnav-links { gap: 18px; }
+            .steps { grid-template-columns: 1fr; }
+            .proof-logo { font-size: 0.8125rem; padding: 7px 14px; }
+            .comparison-table tbody td,
+            .comparison-table thead th { padding: 18px 16px; font-size: 0.875rem; }
+            .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+            .faq-question { font-size: 1.0625rem; padding: 24px 40px 24px 0; }
+            .faq-answer p { font-size: 1rem; }
+            .roi-note { font-size: 1rem; padding: 26px 24px; }
+        }
+        @media (max-width: 640px) {
+            .form-row { grid-template-columns: 1fr; }
+            .modal-content { padding: 26px; margin: 16px; border-radius: 18px; }
         }
         @media (max-width: 480px) {
-            .logo { font-size: 1rem; gap: 4px; }
-            .logo img { width: 28px; height: 28px; }
-            .hero { padding: 100px 0 60px; }
-            .hero h1 { font-size: 1.8rem; color: var(--white); }
+            .container, .container-wide { padding: 0 20px; }
+            .logo { font-size: 0.9375rem; gap: 7px; }
+            .logo img { width: 26px; height: 26px; }
+            .stat-strip { grid-template-columns: 1fr; }
+            .stat { padding: 32px 12px; }
+            .stat:nth-child(n+2) { border-top: 1px solid var(--hair-dark-2); }
+            .stat:nth-child(even) { border-left: none; }
+            .hero-buttons .btn-primary, .hero-buttons .btn-secondary,
+            .cta-buttons .btn-primary, .cta-buttons .btn-secondary { width: 100%; }
         }
-
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .mobile-toggle { display: block; }
-            .nav-inner { height: 60px; padding: 0 16px; }
-            .logo { font-size: 1.2rem; gap: 6px; }
-            .logo img { width: 32px; height: 32px; }
-            .hero { padding: 120px 0 80px; }
-            .hero h1 { font-size: 2.2rem; color: var(--white); }
-            .section-title { font-size: 2rem; }
-            .steps { grid-template-columns: 1fr; }
-            .cta-section h2 { font-size: 2rem; }
-            .footer-grid { grid-template-columns: 1fr; }
-            .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
-        }
-
-        /* ===== ANIMATIONS ===== */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .animate-in {
-            animation: fadeInUp 0.6s ease forwards;
-        }
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        .delay-4 { animation-delay: 0.4s; }
     </style>
 </head>
 <body>
@@ -1081,7 +1338,7 @@
 <nav id="navbar">
     <div class="nav-inner">
         <a href="#" class="logo">
-            <img src="/logo-180.png" alt="" width="40" height="40" style="vertical-align: middle;" aria-hidden="true">
+            <img src="/logo-180.png" alt="" width="28" height="28" style="vertical-align: middle;" aria-hidden="true">
             <span class="logo-text">Strata<span>Flow</span></span>
         </a>
         <div class="nav-links">
@@ -1089,10 +1346,10 @@
             <a href="#how-it-works">How It Works</a>
             <a href="#comparison">Comparison</a>
             <a href="#audit">Invoice Audit</a>
-                        <a href="#pricing">Pricing</a>
+            <a href="#pricing">Pricing</a>
             <a href="#faq">FAQ</a>
             <a href="/login.html" class="nav-login">Member Login</a>
-            <a href="#contact" class="nav-cta">Free Compliance Audit →</a>
+            <a href="#contact" class="nav-cta">Free Compliance Audit</a>
         </div>
         <button class="mobile-toggle" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu" aria-expanded="false">
             <span></span><span></span><span></span>
@@ -1100,79 +1357,94 @@
     </div>
 </nav>
 
+<main id="main-content">
+
 <!-- ===== HERO ===== -->
-<section class="hero">
+<section class="hero band-dark">
     <div class="container">
-        <div class="hero-inner">
-            <div class="hero-content">
-                <div class="hero-badge">Built for Australian Strata Managers</div>
-                <h1>AI Strata Management Software for NSW, VIC & QLD — Cut Admin Time by <span class="highlight">40%</span></h1>
-                <p>StrataFlow is Australia's leading AI-powered strata management software for owners corporation managers across New South Wales (NSW), Victoria (VIC), Queensland (QLD), and all Australian states. Whether you're a strata manager in Sydney, a body corporate manager in Brisbane, or an owners corporation manager in Melbourne — automate compliance tracking, workflow automation, and committee engagement so you can focus on your communities.</p>
-                <div class="hero-buttons">
-                    <a href="#contact" class="btn-primary">Get Your Free Audit →</a>
-                    <a href="#services" class="btn-secondary">▶ See How It Works</a>
-                </div>
+        <div class="hero-badge">Built for Australian Strata Managers</div>
+        <h1>Strata admin, down <span class="highlight">40%</span>.</h1>
+        <p class="hero-lede">AI strata management software for NSW, VIC and QLD. Compliance, workflow and committee engagement — automated.</p>
+        <p class="hero-detail">StrataFlow is Australia's leading AI-powered strata management software for owners corporation managers across New South Wales (NSW), Victoria (VIC), Queensland (QLD), and all Australian states. Whether you're a strata manager in Sydney, a body corporate manager in Brisbane, or an owners corporation manager in Melbourne — automate compliance tracking, workflow automation, and committee engagement so you can focus on your communities.</p>
+        <div class="hero-buttons">
+            <a href="#contact" class="btn-primary">Get your free audit</a>
+            <a href="#services" class="btn-secondary">See how it works</a>
+        </div>
+
+        <div class="stat-strip">
+            <div class="stat">
+                <span class="figure">5.1</span>
+                <span class="caption">Avg. disconnected tools<br>(industry average)</span>
             </div>
-            <div class="hero-visual">
-                <div class="hero-stats">
-                    <div class="hero-stat">
-                        <span class="number">5.1</span>
-                        <span class="label">Avg. Disconnected Tools<br>(Industry Average)</span>
-                    </div>
-                    <div class="hero-stat">
-                        <span class="number">40%</span>
-                        <span class="label">Admin Time Reduction<br>With Automation</span>
-                    </div>
-                    <div class="hero-stat">
-                        <span class="number">24/7</span>
-                        <span class="label">AI Committee<br>Support</span>
-                    </div>
-                    <div class="hero-stat">
-                        <span class="number">100%</span>
-                        <span class="label">Compliance Coverage<br>NSW · VIC · QLD · WA · SA</span>
-                    </div>
-                </div>
+            <div class="stat">
+                <span class="figure">40%</span>
+                <span class="caption">Admin time reduction<br>with automation</span>
+            </div>
+            <div class="stat">
+                <span class="figure">24/7</span>
+                <span class="caption">AI committee<br>support</span>
+            </div>
+            <div class="stat">
+                <span class="figure">100%</span>
+                <span class="caption">Compliance coverage<br>NSW · VIC · QLD · WA · SA</span>
             </div>
         </div>
     </div>
 </section>
 
+<!-- ===== IN-PAGE SUB-NAVIGATION ===== -->
+<div class="subnav">
+    <div class="subnav-inner">
+        <span class="subnav-brand">StrataFlow</span>
+        <div class="subnav-links">
+            <a href="#services">Services</a>
+            <a href="#audit">Invoice Audit</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#comparison">Comparison</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#testimonials">Customers</a>
+            <a href="#faq">FAQ</a>
+        </div>
+        <a href="#contact" class="subnav-cta">Free audit</a>
+    </div>
+</div>
+
 <!-- ===== SOCIAL PROOF ===== -->
 <section class="proof-bar">
     <div class="container">
-        <div class="proof-inner">
-            <p>Trusted by Strata Managers Across New South Wales, Victoria, Queensland & All of Australia</p>
-            <div class="proof-logos">
-                <span class="proof-logo">🏢 NSW Strata</span>
-                <span class="proof-logo">🏢 VIC Owners Corp</span>
-                <span class="proof-logo">🏢 QLD Body Corp</span>
-                <span class="proof-logo">🏢 WA Strata</span>
-                <span class="proof-logo">🏢 SA Strata</span>
-            </div>
+        <p>Trusted by strata managers across New South Wales, Victoria, Queensland &amp; all of Australia</p>
+        <div class="proof-logos">
+            <span class="proof-logo">NSW Strata</span>
+            <span class="proof-logo">VIC Owners Corp</span>
+            <span class="proof-logo">QLD Body Corp</span>
+            <span class="proof-logo">WA Strata</span>
+            <span class="proof-logo">SA Strata</span>
         </div>
     </div>
 </section>
 
 <!-- ===== PROBLEM ===== -->
-<section class="problem">
+<section class="band band-white">
     <div class="container">
-        <span class="section-label">The Problem</span>
-        <h2 class="section-title">Strata Management Software Challenges<br>You're Juggling Too Many Disconnected Tools</h2>
-        <p class="section-subtitle">Small strata managers in Australia face a perfect storm: surging legislative compliance, shrinking profit margins, and an average of 5.1 disconnected tools per business.</p>
+        <div class="section-head">
+            <span class="eyebrow">The problem</span>
+            <h2 class="section-title wide">Too many tools. Not enough hours.</h2>
+            <p class="section-sub">Small strata managers in Australia face a perfect storm: surging legislative compliance, shrinking profit margins, and an average of 5.1 disconnected tools per business.</p>
+        </div>
         <div class="problem-grid">
-            <div class="problem-card">
-                <span class="problem-icon">📋</span>
-                <h3>Regulatory Overload</h3>
+            <div class="card problem-card">
+                <span class="card-figure">Regulation</span>
+                <h3>Regulatory overload</h3>
                 <p>State-specific strata compliance requirements are increasingly complex — mandatory 10-year Capital Works Fund plans, independent levy certification, and expanded disclosure requirements across NSW, VIC, QLD, and WA.</p>
             </div>
-            <div class="problem-card">
-                <span class="problem-icon">🔧</span>
-                <h3>Disconnected Tech Stack</h3>
+            <div class="card problem-card">
+                <span class="card-figure">Tech stack</span>
+                <h3>Disconnected tech stack</h3>
                 <p>Average strata manager uses 5.1 disconnected tools that don't talk to each other. Trust accounting, workflow automation, communication, maintenance — all siloed in spreadsheets, emails, and paper. No central strata management software.</p>
             </div>
-            <div class="problem-card">
-                <span class="problem-icon">💸</span>
-                <h3>Shrinking Margins</h3>
+            <div class="card problem-card">
+                <span class="card-figure">Margins</span>
+                <h3>Shrinking margins</h3>
                 <p>Administrative costs eat into strata management profitability. Committee members demand better digital engagement. Residents expect instant AI-powered responses. But your team hasn't grown proportionally.</p>
             </div>
         </div>
@@ -1180,29 +1452,31 @@
 </section>
 
 <!-- ===== SERVICES ===== -->
-<section class="services" id="services">
+<section class="band band-dark" id="services">
     <div class="container">
-        <span class="section-label" style="color: var(--accent);">AI Strata Management Software</span>
-        <h2 class="section-title">AI Strata Management Software — Everything Automated & Connected</h2>
-        <p class="section-subtitle">The leading strata workflow automation platform for Australian OC managers. We don't replace your trust accounting system — we build a smarter automation layer that connects everything.</p>
+        <div class="section-head">
+            <span class="eyebrow">AI strata management software</span>
+            <h2 class="section-title wide">Everything automated. Everything connected.</h2>
+            <p class="section-sub">The leading strata workflow automation platform for Australian OC managers. We don't replace your trust accounting system — we build a smarter automation layer that connects everything.</p>
+        </div>
         <div class="services-grid">
-            <div class="service-card featured">
-                <span class="service-number">01</span>
-                <h3>AI Workflow Automation</h3>
+            <div class="card service-card featured span-2">
+                <span class="card-figure">01 — Automation</span>
+                <h3>AI workflow automation</h3>
                 <p>Leading strata workflow automation for NSW strata managers, VIC owners corporation managers, and QLD body corporate managers. Connect your existing trust accounting system — whether it's StrataMaster, Intellistrata, or another platform — and automate compliance tracking, maintenance requests, and meeting scheduling across all Australian states.</p>
-                <ul class="service-features">
-                    <li>Automated maintenance request triage & routing</li>
-                    <li>Compliance deadline alerts & tracking</li>
+                <ul class="feature-list">
+                    <li>Automated maintenance request triage &amp; routing</li>
+                    <li>Compliance deadline alerts &amp; tracking</li>
                     <li>Automated committee meeting scheduling</li>
-                    <li>Smart invoice processing & categorisation</li>
+                    <li>Smart invoice processing &amp; categorisation</li>
                     <li>Email-to-ticket conversion system</li>
                 </ul>
             </div>
-            <div class="service-card">
-                <span class="service-number">02</span>
-                <h3>Compliance Engine</h3>
+            <div class="card service-card">
+                <span class="card-figure">02 — Compliance</span>
+                <h3>Compliance engine</h3>
                 <p>Best strata compliance software for Australian OC managers in New South Wales, Victoria, Queensland, and Western Australia. Never miss a regulatory deadline — our AI engine tracks NSW strata schemes legislation, VIC Owners Corporation Act requirements, QLD Body Corporate and Community Management Act, and WA Strata Titles Act — and auto-generates compliance reports.</p>
-                <ul class="service-features">
+                <ul class="feature-list">
                     <li>State-specific regulatory tracking (NSW Strata Schemes Act, VIC Owners Corp Act, QLD BCCM Act, WA Strata Titles Act)</li>
                     <li>Auto-generated compliance reports</li>
                     <li>Capital Works Fund plan monitoring</li>
@@ -1210,35 +1484,35 @@
                     <li>Mandatory audit preparation</li>
                 </ul>
             </div>
-            <div class="service-card">
-                <span class="service-number">03</span>
-                <h3>Committee Engagement Platform</h3>
+            <div class="card service-card">
+                <span class="card-figure">03 — Engagement</span>
+                <h3>Committee engagement platform</h3>
                 <p>AI-powered committee engagement platform for strata communities across NSW, VIC, and QLD. Bridge the gap between legacy trust accounting and modern communication with digital voting, AI resident chatbots, and automated meeting minutes — built for Australian owners corporations and body corporates.</p>
-                <ul class="service-features">
-                    <li>AI-powered resident Q&A chatbot</li>
+                <ul class="feature-list">
+                    <li>AI-powered resident Q&amp;A chatbot</li>
                     <li>Automated meeting minutes distribution</li>
-                    <li>Digital voting & proposal management</li>
+                    <li>Digital voting &amp; proposal management</li>
                     <li>Real-time maintenance status updates</li>
-                    <li>SMS & email broadcast system</li>
+                    <li>SMS &amp; email broadcast system</li>
                 </ul>
             </div>
-            <div class="service-card">
-                <span class="service-number">04</span>
-                <h3>Integration & Migration</h3>
+            <div class="card service-card">
+                <span class="card-figure">04 — Integration</span>
+                <h3>Integration &amp; migration</h3>
                 <p>Seamless StrataMaster and Intellistrata integration for strata managers across New South Wales, Victoria, Queensland, and all Australian states. Connect your existing trust accounting system — no data migration or risky system switch needed. We build a smart automation layer on top of what you already use.</p>
-                <ul class="service-features">
+                <ul class="feature-list">
                     <li>Seamless integration with legacy systems</li>
-                    <li>Data migration from spreadsheets & emails</li>
+                    <li>Data migration from spreadsheets &amp; emails</li>
                     <li>Custom API connections for your stack</li>
-                    <li>Team training & onboarding</li>
+                    <li>Team training &amp; onboarding</li>
                     <li>Ongoing technical support</li>
                 </ul>
             </div>
-            <div class="service-card">
-                <span class="service-number">05</span>
+            <div class="card service-card">
+                <span class="card-figure">05 — Assurance</span>
                 <h3>Supplier Invoice &amp; Contract Audit</h3>
                 <p>Every supplier invoice reconciled against the contract before it is paid. StrataFlow reads the agreement, extracts the agreed fee schedule, inclusions and escalation clauses, then checks each invoice line by line and flags anything that does not match — so overcharges are caught before the money leaves the account, not eighteen months later.</p>
-                <ul class="service-features">
+                <ul class="feature-list">
                     <li>Line-by-line invoice vs contract reconciliation</li>
                     <li>Escalation &amp; CPI clause validation (including partial-CPI caps)</li>
                     <li>Inclusions vs chargeable extras — spot double-billing</li>
@@ -1251,14 +1525,16 @@
 </section>
 
 <!-- ===== SUPPLIER INVOICE & CONTRACT AUDIT ===== -->
-<section class="audit" id="audit">
+<section class="band band-white" id="audit">
     <div class="container">
-        <span class="section-label" style="color: var(--accent);">Pre-Payment Assurance</span>
-        <h2 class="section-title">Supplier Invoice &amp; Contract Compliance Audit</h2>
-        <p class="section-subtitle">Most strata invoices are approved on trust, not on evidence. A building manager signs off, accounts processes, the payment goes out &mdash; and nobody re-reads the contract. That is how rates drift, CPI gets over-applied, and &ldquo;extras&rdquo; quietly become permanent.</p>
+        <div class="section-head">
+            <span class="eyebrow">Pre-payment assurance</span>
+            <h2 class="section-title wide">Nobody re-reads the contract. We do.</h2>
+            <p class="section-sub">Most strata invoices are approved on trust, not on evidence. A building manager signs off, accounts processes, the payment goes out &mdash; and nobody re-reads the contract. That is how rates drift, CPI gets over-applied, and &ldquo;extras&rdquo; quietly become permanent.</p>
+        </div>
 
         <div class="audit-grid">
-            <div class="audit-col">
+            <div class="card audit-col">
                 <h3 class="audit-h">What we check, every invoice</h3>
                 <ul class="audit-list">
                     <li><strong>Agreed fee vs billed fee</strong> &mdash; the base rate in the contract against what actually appears on the invoice.</li>
@@ -1271,7 +1547,7 @@
                     <li><strong>Duplicates and out-of-scope items</strong> &mdash; the same service billed twice, or a scheduled service charged as extraordinary work.</li>
                 </ul>
             </div>
-            <div class="audit-col">
+            <div class="card audit-col">
                 <h3 class="audit-h">What you get</h3>
                 <ul class="audit-list audit-outcomes">
                     <li><strong>Approve</strong> &mdash; invoice matches the contract, with the supporting clause cited.</li>
@@ -1288,30 +1564,36 @@
 </section>
 
 <!-- ===== HOW IT WORKS ===== -->
-<section class="how-it-works" id="how-it-works">
-    <div class="container" style="text-align: center;">
-        <span class="section-label">How It Works</span>
-        <h2 class="section-title">How StrataFlow Strata Workflow Automation Works in 4 Weeks</h2>
-        <p class="section-subtitle" style="margin: 0 auto;">No disruption. No risky system switches. Just smart automation layered on top of what you already use.</p>
+<section class="band band-grey" id="how-it-works">
+    <div class="container">
+        <div class="section-head center">
+            <span class="eyebrow">How it works</span>
+            <h2 class="section-title wide">From chaos to automated in four weeks.</h2>
+            <p class="section-sub">No disruption. No risky system switches. Just smart automation layered on top of what you already use.</p>
+        </div>
         <div class="steps">
             <div class="step">
-                <div class="step-number">1</div>
-                <h3>Free Compliance Audit</h3>
+                <span class="step-number">1</span>
+                <span class="step-week">Week one</span>
+                <h3>Free compliance audit</h3>
                 <p>We analyse your current tech stack, workflows, and compliance gaps. 30-minute call, zero obligation.</p>
             </div>
             <div class="step">
-                <div class="step-number">2</div>
-                <h3>Custom Automation Plan</h3>
+                <span class="step-number">2</span>
+                <span class="step-week">Week two</span>
+                <h3>Custom automation plan</h3>
                 <p>We design a tailored automation roadmap prioritising quick wins — usually 40% admin reduction in first 30 days.</p>
             </div>
             <div class="step">
-                <div class="step-number">3</div>
-                <h3>Build & Integrate</h3>
+                <span class="step-number">3</span>
+                <span class="step-week">Week three</span>
+                <h3>Build &amp; integrate</h3>
                 <p>Our team builds and connects your automation layer. Works alongside your existing trust accounting system.</p>
             </div>
             <div class="step">
-                <div class="step-number">4</div>
-                <h3>Train & Optimise</h3>
+                <span class="step-number">4</span>
+                <span class="step-week">Week four</span>
+                <h3>Train &amp; optimise</h3>
                 <p>Full team training, ongoing support, and monthly optimisation calls to ensure maximum ROI.</p>
             </div>
         </div>
@@ -1319,63 +1601,65 @@
 </section>
 
 <!-- ===== COMPARISON ===== -->
-<section class="comparison" id="comparison">
-    <div class="container" style="text-align: center;">
-        <span class="section-label">Why StrataFlow</span>
-        <h2 class="section-title">StrataFlow vs Traditional Strata Management Software</h2>
-        <p class="section-subtitle" style="margin: 0 auto;">Unlike all-in-one platforms that force you to switch systems, we enhance what you already have.</p>
+<section class="band band-white" id="comparison">
+    <div class="container-wide">
+        <div class="section-head center">
+            <span class="eyebrow">Why StrataFlow</span>
+            <h2 class="section-title wide">Compare the approach.</h2>
+            <p class="section-sub">Unlike all-in-one platforms that force you to switch systems, we enhance what you already have.</p>
+        </div>
         <div class="comparison-wrapper">
         <table class="comparison-table">
             <thead>
                 <tr>
-                    <th style="text-align:left;">Feature</th>
-                    <th>Traditional Software<br><small style="font-weight:400;color:var(--gray);">(Intellistrata, StrataMaster)</small></th>
-                    <th>Point Solutions<br><small style="font-weight:400;color:var(--gray);">(Onsite.fm, etc.)</small></th>
-                    <th class="highlight-col">StrataFlow<br><small style="font-weight:400;opacity:0.8;">(Our Approach)</small></th>
+                    <th scope="col">Feature</th>
+                    <th scope="col">Traditional software<small>Intellistrata, StrataMaster</small></th>
+                    <th scope="col">Point solutions<small>Onsite.fm, etc.</small></th>
+                    <th scope="col" class="highlight-col">StrataFlow<small>Our approach</small></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td style="text-align:left;">Trust Accounting</td>
+                    <td>Trust accounting</td>
                     <td><span class="check">✓</span></td>
                     <td><span class="cross">✗</span></td>
                     <td class="highlight-col"><span class="check">✓</span> Integrates with yours</td>
                 </tr>
                 <tr>
-                    <td style="text-align:left;">Workflow Automation</td>
+                    <td>Workflow automation</td>
                     <td><span class="partial">~</span> Basic</td>
                     <td><span class="partial">~</span> Limited</td>
                     <td class="highlight-col"><span class="check">✓</span> Full AI-powered</td>
                 </tr>
                 <tr>
-                    <td style="text-align:left;">Compliance Tracking</td>
+                    <td>Compliance tracking</td>
                     <td><span class="check">✓</span></td>
                     <td><span class="cross">✗</span></td>
                     <td class="highlight-col"><span class="check">✓</span> Multi-state, auto-alerts</td>
                 </tr>
                 <tr>
-                    <td style="text-align:left;">Committee Engagement</td>
+                    <td>Committee engagement</td>
                     <td><span class="cross">✗</span></td>
                     <td><span class="partial">~</span> Basic</td>
                     <td class="highlight-col"><span class="check">✓</span> AI chatbot + voting</td>
                 </tr>
                 <tr>
-                    <td style="text-align:left;">Requires System Switch?</td>
+                    <td>Requires system switch?</td>
                     <td><span class="cross">✗</span> Yes, risky</td>
                     <td><span class="cross">✗</span> Adds another tool</td>
                     <td class="highlight-col"><span class="check">✓</span> No — enhances what you have</td>
                 </tr>
                 <tr>
-                    <td style="text-align:left;">Implementation Time</td>
+                    <td>Implementation time</td>
                     <td>3-6 months</td>
                     <td>2-4 weeks per tool</td>
-                    <td class="highlight-col"><strong style="color:var(--primary);">1-2 weeks</strong></td>
+                    <td class="highlight-col"><strong style="color:#2563EB;">1-2 weeks</strong></td>
                 </tr>
                 <tr>
-                    <td style="text-align:left;">Monthly Cost (est.)</td>
+                    <td>Monthly cost (est.)</td>
                     <td>$10-40/lot</td>
                     <td>$50-200+/tool</td>
-                    <td class="highlight-col"><strong style="color:var(--primary);">From $1/lot/mo</strong></td>
+                    <td class="highlight-col"><strong style="color:#2563EB;">From $1/lot/mo</strong></td>
                 </tr>
             </tbody>
         </table>
@@ -1384,11 +1668,13 @@
 </section>
 
 <!-- ===== PRICING ===== -->
-<section class="pricing" id="pricing">
-    <div class="container" style="text-align: center;">
-        <span class="section-label">Pricing</span>
-        <h2 class="section-title">As low as $1 per lot, per month</h2>
-        <p class="section-subtitle" style="margin: 0 auto;">That is less than a single hour of admin time. Most strata managers reclaim 40%+ of their week &mdash; StrataFlow pays for itself in the first month.</p>
+<section class="band band-grey" id="pricing">
+    <div class="container">
+        <div class="section-head center">
+            <span class="eyebrow">Pricing</span>
+            <h2 class="section-title wide">As low as $1 per lot, per month</h2>
+            <p class="section-sub">That is less than a single hour of admin time. Most strata managers reclaim 40%+ of their week &mdash; StrataFlow pays for itself in the first month.</p>
+        </div>
         <div class="billing-paused" role="status">
             <strong>Online signup is temporarily paused.</strong> Card checkout is switched off while we rework our billing.
             <a href="#contact">Book a free compliance audit</a> or email
@@ -1409,6 +1695,7 @@
                 <button class="pricing-btn" onclick="handleSubscribe('starter')">Start Free Trial</button>
             </div>
             <div class="pricing-card popular">
+                <span class="pricing-badge">Most popular</span>
                 <h3>Growth</h3>
                 <div class="price">$2.50<span>/lot/mo</span></div>
                 <p class="price-desc">100&ndash;500 lots &middot; $500/month minimum</p>
@@ -1446,11 +1733,13 @@
 </section>
 
 <!-- ===== TESTIMONIALS ===== -->
-<section class="testimonials" id="testimonials">
-    <div class="container" style="text-align: center;">
-        <span class="section-label" style="color: var(--accent);">Testimonials</span>
-        <h2 class="section-title">What Strata Managers Say</h2>
-        <p class="section-subtitle" style="margin: 0 auto;">Real results from real strata businesses across Australia.</p>
+<section class="band band-dark" id="testimonials">
+    <div class="container">
+        <div class="section-head center">
+            <span class="eyebrow">Customers</span>
+            <h2 class="section-title wide">What strata managers say.</h2>
+            <p class="section-sub">Real results from real strata businesses across Australia.</p>
+        </div>
         <div class="testimonial-grid">
             <div class="testimonial-card">
                 <div class="testimonial-stars">★★★★★</div>
@@ -1490,11 +1779,11 @@
 </section>
 
 <!-- ===== FAQ ===== -->
-<section class="faq" id="faq">
+<section class="band band-white" id="faq">
     <div class="container">
-        <div style="text-align: center;">
-            <span class="section-label">FAQ</span>
-            <h2 class="section-title">Frequently Asked Questions</h2>
+        <div class="section-head center">
+            <span class="eyebrow">FAQ</span>
+            <h2 class="section-title wide">Frequently asked questions.</h2>
         </div>
         <div class="faq-list">
             <div class="faq-item">
@@ -1567,31 +1856,29 @@
 </section>
 
 <!-- ===== CTA SECTION ===== -->
-<section class="cta-section" id="contact">
+<section class="band band-dark cta-section" id="contact">
     <div class="container">
-        <div class="cta-content">
-            <h2>Ready to Automate Your Strata Management Workflow?</h2>
-            <p>Book your free 30-minute compliance audit for your NSW, VIC, or QLD strata business. We'll analyse your current strata management processes and show you exactly where AI workflow automation can save you hours every week — no matter which state you operate in.</p>
-            <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-                <a href="mailto:hello@strataflow.work" class="btn-primary" style="font-size: 1.1rem; padding: 18px 40px;">
-                    📧 Book Free Audit →
-                </a>
-                <button onclick="openContactModal()" class="btn-secondary" style="font-size: 1.1rem; padding: 18px 40px;">
-                    📞 Contact Us →
-                </button>
-            </div>
-            <p style="margin-top: 24px; font-size: 0.85rem; color: var(--gray);">No obligation • 30 minutes • Actionable results guaranteed</p>
+        <h2>Ready to automate your strata workflow?</h2>
+        <p>Book your free 30-minute compliance audit for your NSW, VIC, or QLD strata business. We'll analyse your current strata management processes and show you exactly where AI workflow automation can save you hours every week — no matter which state you operate in.</p>
+        <div class="cta-buttons">
+            <a href="mailto:hello@strataflow.work" class="btn-primary">Book free audit</a>
+            <button onclick="openContactModal()" class="btn-secondary">Contact us</button>
         </div>
+        <p class="cta-fine">No obligation • 30 minutes • Actionable results guaranteed</p>
     </div>
 </section>
+
+</main>
 
 <!-- ===== FOOTER ===== -->
 <footer>
     <div class="container">
         <div class="footer-grid">
             <div class="footer-brand">
-                <img src="/logo-180.png" alt="" width="48" height="48" style="margin-bottom: 12px; display: block;" aria-hidden="true">
-                <span class="logo">Strata<span>Flow</span></span>
+                <span class="logo">
+                    <img src="/logo-180.png" alt="" width="28" height="28" aria-hidden="true">
+                    <span class="logo-text">Strata<span>Flow</span></span>
+                </span>
                 <p>AI-powered workflow automation for Australian strata managers across New South Wales, Victoria, Queensland, and all states. Cutting admin time by 40%+ since 2025.</p>
             </div>
             <div class="footer-col">
@@ -1599,7 +1886,8 @@
                 <a href="#services">Workflow Automation</a>
                 <a href="#services">Compliance Engine</a>
                 <a href="#services">Committee Engagement</a>
-                <a href="#services">Integration & Migration</a>
+                <a href="#services">Integration &amp; Migration</a>
+                <a href="#audit">Invoice &amp; Contract Audit</a>
             </div>
             <div class="footer-col">
                 <h4>Resources</h4>
@@ -1625,10 +1913,10 @@
 
 <!-- ===== JAVASCRIPT ===== -->
 <script>
-    // Navbar scroll effect
+    // Navbar scroll effect — hairline bottom border appears on scroll
     window.addEventListener('scroll', () => {
         const nav = document.getElementById('navbar');
-        if (window.scrollY > 50) {
+        if (window.scrollY > 10) {
             nav.classList.add('scrolled');
         } else {
             nav.classList.remove('scrolled');
@@ -1639,11 +1927,11 @@
     function toggleFaq(btn) {
         const answer = btn.nextElementSibling;
         const isOpen = answer.classList.contains('open');
-        
+
         // Close all
         document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
         document.querySelectorAll('.faq-question').forEach(q => q.classList.remove('active'));
-        
+
         // Open clicked (if it was closed)
         if (!isOpen) {
             answer.classList.add('open');
@@ -1654,31 +1942,44 @@
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
+            const href = this.getAttribute('href');
+            if (href === '#') return;
+            const target = document.querySelector(href);
             if (target) {
+                e.preventDefault();
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const links = document.querySelector('.nav-links');
+                if (links && links.classList.contains('mobile-open')) toggleMobileMenu();
             }
         });
     });
 
-    // Intersection Observer for scroll animations
-    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, observerOptions);
+    // Intersection Observer — calm fade-and-rise reveals.
+    // Reveal classes are added by JS, so without JS the page stays fully visible.
+    (function () {
+        const targets = document.querySelectorAll(
+            '.problem-card, .service-card, .step, .testimonial-card, .pricing-card, ' +
+            '.audit-col, .section-head, .stat, .comparison-wrapper, .roi-note, .billing-paused, .faq-item'
+        );
+        if (!('IntersectionObserver' in window)) return;
 
-    document.querySelectorAll('.problem-card, .service-card, .step, .testimonial-card, .pricing-card').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(el);
-    });
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+
+        targets.forEach(el => {
+            el.classList.add('reveal-ready');
+            // Gentle stagger across siblings in the same row
+            const idx = Array.prototype.indexOf.call(el.parentNode.children, el);
+            el.style.transitionDelay = Math.min(idx, 4) * 70 + 'ms';
+            observer.observe(el);
+        });
+    })();
 
     // Mobile menu toggle
     function toggleMobileMenu() {
@@ -1687,15 +1988,6 @@
         const isOpen = links.classList.toggle('mobile-open');
         toggle.classList.toggle('active', isOpen);
         toggle.setAttribute('aria-expanded', isOpen);
-        if (isOpen) {
-            links.style.position = 'absolute';
-            links.style.top = '72px';
-            links.style.left = '0';
-            links.style.right = '0';
-            links.style.background = 'rgba(15, 23, 42, 0.98)';
-            links.style.padding = '24px';
-            links.style.gap = '16px';
-        }
     }
 
     // Stripe Integration — creates a real Checkout Session via the
@@ -1735,8 +2027,8 @@
 <div id="contactModal" class="modal-overlay" style="display:none;">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>📞 Contact Us</h3>
-            <button class="modal-close" onclick="closeContactModal()">×</button>
+            <h3>Contact us</h3>
+            <button class="modal-close" onclick="closeContactModal()" aria-label="Close contact form">×</button>
         </div>
         <form id="contactForm" name="contact" data-netlify="true" onsubmit="submitContactForm(event)">
             <div class="form-row">
@@ -1770,175 +2062,9 @@
             </div>
             <button type="submit" class="btn-submit" id="submitBtn">Send Message</button>
         </form>
-        <div id="formStatus" style="display:none; margin-top: 16px; padding: 12px; border-radius: 6px; text-align: center;"></div>
+        <div id="formStatus" style="display:none; margin-top: 16px; padding: 12px; border-radius: 10px; text-align: center;"></div>
     </div>
 </div>
-
-<style>
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(6, 27, 49, 0.8);
-    backdrop-filter: blur(8px);
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideUp {
-    from { transform: translateY(30px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
-.modal-content {
-    background: white;
-    border-radius: 16px;
-    padding: 40px;
-    max-width: 600px;
-    width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    animation: slideUp 0.3s ease;
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--space-md);
-    padding-bottom: 16px;
-    border-bottom: 2px solid #f1f5f9;
-}
-
-.modal-header h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #0f172a;
-    margin: 0;
-}
-
-.modal-close {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    color: #64748b;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    transition: all 0.2s;
-}
-
-.modal-close:hover {
-    background: #f1f5f9;
-    color: #0f172a;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #1e293b;
-    margin-bottom: 6px;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 12px 16px;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-family: inherit;
-    transition: all 0.2s;
-    background: #f8fafc;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #2563eb;
-    background: white;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-    color: #94a3b8;
-}
-
-.btn-submit {
-    width: 100%;
-    padding: 16px;
-    background: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    margin-top: 8px;
-}
-
-.btn-submit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
-}
-
-.btn-submit:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-}
-
-#formStatus.success {
-    background: #d1fae5;
-    color: #065f46;
-    border: 1px solid #a7f3d0;
-}
-
-#formStatus.error {
-    background: #fee2e2;
-    color: #991b1b;
-    border: 1px solid #fecaca;
-}
-
-@media (max-width: 640px) {
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-    
-    .modal-content {
-        padding: 24px;
-        margin: 16px;
-    }
-}
-</style>
 
 <script>
 // Cloudflare Worker that delivers the contact form via Email Routing.
