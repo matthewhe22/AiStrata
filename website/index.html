@@ -96,12 +96,12 @@
         {
           "@type": "Question",
           "name": "What if I'm a small manager with just 10-20 lots?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Our Starter plan at $500/mo is designed for small managers. Even with 10 lots, automating compliance tracking and workflow can save you 5-10 hours per week — that's $500+ in recovered time immediately." }
+          "acceptedAnswer": { "@type": "Answer", "text": "StrataFlow is priced per lot, per month. The Starter plan is $5 per lot with a $150/month minimum, so a 30-lot scheme costs $150/month. Automating compliance tracking and workflow typically saves 5-10 hours per week, so the platform pays for itself in the first month." }
         },
         {
           "@type": "Question",
           "name": "How much does strata automation cost in Australia?",
-          "acceptedAnswer": { "@type": "Answer", "text": "StrataFlow offers flat monthly pricing starting at $500/mo for small managers (Starter plan), $1,000/mo for growing businesses (Growth plan), and custom pricing for enterprise portfolios with 500+ lots. Unlike per-lot pricing models, there are no hidden fees." }
+          "acceptedAnswer": { "@type": "Answer", "text": "StrataFlow charges per lot, per month: $5/lot for schemes under 100 lots, $2.50/lot for 100-500 lots, and as low as $1/lot for portfolios of 500+ lots. That works out cheaper than a single hour of admin time, and most managers recover 40%+ of their working week. There are no setup fees and no lock-in contracts." }
         },
         {
           "@type": "Question",
@@ -834,6 +834,16 @@
             font-size: 0.85rem; color: var(--gray);
             margin-bottom: var(--space-md);
         }
+        .roi-note {
+            max-width: 720px; margin: 48px auto 0;
+            padding: 24px 28px;
+            background: var(--light);
+            border-left: 4px solid var(--accent);
+            border-radius: var(--radius);
+            font-size: 0.95rem; line-height: 1.7;
+            color: var(--dark-light); text-align: left;
+        }
+        .roi-note strong { color: var(--dark); }
         .pricing-card ul {
             list-style: none; padding: 0; margin-bottom: 32px;
         }
@@ -1365,7 +1375,7 @@
                     <td style="text-align:left;">Monthly Cost (est.)</td>
                     <td>$10-40/lot</td>
                     <td>$50-200+/tool</td>
-                    <td class="highlight-col"><strong style="color:var(--primary);">$500-1,500/mo flat</strong></td>
+                    <td class="highlight-col"><strong style="color:var(--primary);">From $1/lot/mo</strong></td>
                 </tr>
             </tbody>
         </table>
@@ -1377,8 +1387,8 @@
 <section class="pricing" id="pricing">
     <div class="container" style="text-align: center;">
         <span class="section-label">Pricing</span>
-        <h2 class="section-title">Simple, Predictable Pricing</h2>
-        <p class="section-subtitle" style="margin: 0 auto;">No per-lot fees. No hidden costs. Flat monthly retainer that scales with your business needs.</p>
+        <h2 class="section-title">As low as $1 per lot, per month</h2>
+        <p class="section-subtitle" style="margin: 0 auto;">That is less than a single hour of admin time. Most strata managers reclaim 40%+ of their week &mdash; StrataFlow pays for itself in the first month.</p>
         <div class="billing-paused" role="status">
             <strong>Online signup is temporarily paused.</strong> Card checkout is switched off while we rework our billing.
             <a href="#contact">Book a free compliance audit</a> or email
@@ -1387,8 +1397,8 @@
         <div class="pricing-grid">
             <div class="pricing-card">
                 <h3>Starter</h3>
-                <div class="price">$500<span>/mo</span></div>
-                <p class="price-desc">Perfect for small managers (< 100 lots)</p>
+                <div class="price">$5<span>/lot/mo</span></div>
+                <p class="price-desc">Under 100 lots &middot; $150/month minimum</p>
                 <ul>
                     <li>Compliance deadline tracking</li>
                     <li>Basic workflow automation (3 workflows)</li>
@@ -1400,8 +1410,8 @@
             </div>
             <div class="pricing-card popular">
                 <h3>Growth</h3>
-                <div class="price">$1,000<span>/mo</span></div>
-                <p class="price-desc">For growing businesses (100-500 lots)</p>
+                <div class="price">$2.50<span>/lot/mo</span></div>
+                <p class="price-desc">100&ndash;500 lots &middot; $500/month minimum</p>
                 <ul>
                     <li>Everything in Starter</li>
                     <li>Advanced AI automation (unlimited workflows)</li>
@@ -1414,11 +1424,11 @@
             </div>
             <div class="pricing-card">
                 <h3>Enterprise</h3>
-                <div class="price">Custom</div>
-                <p class="price-desc">For large portfolios (500+ lots)</p>
+                <div class="price">$1<span>/lot/mo</span></div>
+                <p class="price-desc">500+ lots &middot; volume rates below $1</p>
                 <ul>
                     <li>Everything in Growth</li>
-                    <li>Custom integrations & APIs</li>
+                    <li>Custom integrations &amp; APIs</li>
                     <li>Dedicated account manager</li>
                     <li>White-label options</li>
                     <li>On-site training sessions</li>
@@ -1426,6 +1436,11 @@
                 </ul>
                 <button class="pricing-btn" onclick="handleSubscribe('enterprise')">Contact Us</button>
             </div>
+        </div>
+        <div class="roi-note">
+            <strong>The maths is simple.</strong> A strata administrator costs about <strong>$65,000 a year</strong>.
+            Recover 40% of their week and that is <strong>$26,000</strong> back &mdash; against
+            <strong>$6,000 a year</strong> for a 200-lot portfolio on Growth.
         </div>
     </div>
 </section>
@@ -1511,7 +1526,7 @@
                     What if I'm a small manager with just 10-20 lots?
                 </button>
                 <div class="faq-answer">
-                    <p>Our Starter plan at $500/mo is designed for small managers. Even with just 10 lots, automating compliance tracking and workflow can save you 5-10 hours per week — that's $500+ in recovered time immediately.</p>
+                    <p>Our Starter plan is <strong>$5 per lot per month</strong> with a $150/month minimum, so a 30-lot scheme costs $150/month. Even at that size, automating compliance tracking and workflow typically saves 5-10 hours a week — the platform pays for itself in the first month.</p>
                 </div>
             </div>
             <div class="faq-item">
