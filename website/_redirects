@@ -1,3 +1,9 @@
 # Cloudflare Pages redirects (same syntax as Netlify)
-# Static SPA fallback — everything that is not a real file serves index.html
-/*    /index.html   200
+#
+# The previous catch-all `/* /index.html 200` made EVERY unknown URL return
+# HTTP 200 with the full homepage. That produced infinite duplicate URLs and
+# soft-404s for Google and AI crawlers (e.g. /llms.txt was serving the homepage).
+#
+# Cloudflare Pages already serves `404.html` with a real 404 status for any
+# path that does not match a static file, so no catch-all is needed here.
+# Do not re-add `/* /index.html 200`.

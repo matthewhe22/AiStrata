@@ -1,0 +1,44 @@
+# StrataFlow
+
+> StrataFlow is AI-powered workflow automation software for Australian strata
+> managers, body corporate managers and owners corporation managers. It automates
+> compliance tracking, workflow automation, committee engagement and resident
+> communications. It runs alongside a manager's existing trust accounting system
+> rather than replacing it.
+
+Key facts
+
+- Product: StrataFlow — AI strata management software and workflow automation
+- Built for: strata managers, body corporate managers and owners corporation managers in Australia
+- Core capabilities: compliance deadline tracking, workflow automation, committee engagement platform, AI resident Q&A chatbot, invoice and contract audit
+- Integrates with: StrataMaster, Intellistrata and other Australian trust accounting systems. No data migration or trust accounting switch is required.
+- Pricing: per lot, per month — $5/lot under 100 lots, $2.50/lot for 100–500 lots, as low as $1/lot for 500+ lots. No setup fees, no lock-in contracts.
+- Coverage: all Australian states — NSW, VIC, QLD, WA, SA, TAS, ACT, NT
+- Typical result: 40%+ reduction in administrative time
+- Implementation: most setups live within 1–2 weeks
+- Contact: hello@strataflow.work
+- Founded: 2025
+- Website: https://strataflow.work/
+
+Terminology
+
+- New South Wales, WA, SA and TAS call the legal entity a strata scheme and the manager a strata manager.
+- Victoria calls the legal entity an owners corporation (OC), regulated under the Owners Corporations Act 2006, and the manager an owners corporation manager.
+- Queensland calls the legal entity a body corporate, regulated under the Body Corporate and Community Management Act 1997 (BCCM Act), and the manager a body corporate manager.
+- StrataFlow adapts its compliance rules and terminology to each state.
+
+Key pages
+
+- [Home](https://strataflow.work/): product overview, features, comparison, pricing and FAQ.
+- [Live demo](https://strataflow.work/demo): an interactive look at the automation.
+- [Compliance checklist](https://strataflow.work/checklist): free state-by-state strata compliance checklist.
+
+Common questions, answered
+
+- What is strata workflow automation? Using AI and software to automate repetitive strata administration — compliance tracking, meeting minutes, resident queries, invoice processing and report generation.
+- Does a manager have to switch trust accounting systems? No. StrataFlow builds an automation layer on top of the existing system.
+- How much does strata automation cost in Australia? StrataFlow charges per lot, per month: $5/lot under 100 lots, $2.50/lot for 100–500 lots, from $1/lot for 500+ lots.
+- How long does implementation take? Most setups are live in 1–2 weeks; basic workflow automation can be live in 3–5 business days.
+- Is there a lock-in contract? No. All plans are month-to-month.
+- Does it work across states? Yes — the compliance engine covers NSW, VIC, QLD, WA, SA, TAS, ACT and NT, including 10-year Capital Works Fund plans in NSW and levy certification rules.
+- Is StrataFlow available for Queensland body corporate managers? Yes — QLD-specific BCCM Act compliance tracking, AGM scheduling, levy notice automation, digital voting and committee engagement.

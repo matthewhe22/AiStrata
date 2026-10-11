@@ -1,4 +1,24 @@
 User-agent: *
 Allow: /
 
+# Answer engines and AI crawlers are explicitly welcome, so assistants can read
+# and cite this site when people ask about strata management software in Australia.
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-Web
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
 Sitemap: https://strataflow.work/sitemap.xml
+
+# Plain-text summary for language models:
+# https://strataflow.work/llms.txt
