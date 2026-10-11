@@ -1926,6 +1926,10 @@
 </style>
 
 <script>
+// Cloudflare Worker that delivers the contact form via Email Routing.
+// Used as a fallback while strataflow.work is still served by Netlify.
+const CONTACT_FALLBACK = 'https://strataflow-form.strataflow.workers.dev/api/contact';
+
 function openContactModal() {
     document.getElementById('contactModal').style.display = 'flex';
     document.body.style.overflow = 'hidden';
@@ -2007,18 +2011,23 @@ async function submitContactForm(event) {
             serverError = '';
         }
 
-        // Fallback: while the site is still served by Netlify (before the
-        // Cloudflare cutover) /api/contact does not exist, so fall back to
-        // Netlify Forms. A 2xx from POST / with form-name means Netlify's form
-        // handler accepted it. Harmless on Pages, which never reaches here.
+        // Fallback: while the site is still served by Netlify, /api/contact does
+        // not exist on this origin, so talk to the Worker directly. It sends the
+        // enquiry through Cloudflare Email Routing. Drop this once the
+        // Cloudflare cutover makes the same-origin path live.
         if (!delivered) {
             try {
-                const fb = await fetch('/', {
+                const fb = await fetch(CONTACT_FALLBACK, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams({ 'form-name': 'contact', ...formData }).toString()
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ...formData,
+                        page: window.location.href,
+                        source: 'strataflow.work contact modal (worker fallback)'
+                    })
                 });
-                if (fb.ok) delivered = true;
+                const fr = await fb.json().catch(() => null);
+                if (fb.ok && fr && fr.ok) delivered = true;
             } catch (e) { /* fall through to the error state */ }
         }
 
