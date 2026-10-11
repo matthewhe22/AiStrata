@@ -2,16 +2,15 @@ name = "strataflow-form"
 main = "src/index.js"
 compatibility_date = "2026-10-10"
 
+# NOTE: do NOT add a `routes` block here without first granting the token
+# Zone -> Workers Routes -> Edit. Wrangler treats the presence of `routes` as
+# "deploy to routes instead of workers.dev": if route registration then fails
+# (it did, with "No access to the specified resource"), the workers.dev
+# endpoint is left disabled and the Worker becomes unreachable — HTTP 404 with
+# Cloudflare error 1042. The site's contact form calls the workers.dev URL, so
+# that silently breaks it.
+
 # Cloudflare Email Routing sending. The recipient must be an address already
 # verified in Email Routing for this account.
 [[send_email]]
 name = "SEND_EMAIL"
-
-# Route the site's own /api/* at the Worker. A Workers route only takes effect
-# once the hostname is proxied through Cloudflare; today strataflow.work is a
-# DNS-only CNAME to Netlify, so this activates when the Pages cutover proxies
-# the zone. Until then the Worker is reachable at
-# https://strataflow-form.strataflow.workers.dev
-routes = [
-  { pattern = "strataflow.work/api/*", zone_name = "strataflow.work" }
-]

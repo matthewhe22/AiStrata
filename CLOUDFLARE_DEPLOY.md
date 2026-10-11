@@ -103,18 +103,34 @@ Sanity check after deploy: `GET /health` should return
 
 ---
 
-## Step 2 — Cut over DNS
+## Step 2 — DNS cutover (done)
 
-Once `strataflow.pages.dev` and the Worker both look right:
+Completed. `strataflow.work` and `www.strataflow.work` are `CNAME` →
+`strataflow.pages.dev`, **proxied**, both domains `active` with SSL validated.
+The MX/TXT mail records were left untouched.
 
-1. Add `strataflow.work` and `www.strataflow.work` under **Pages → Custom domains**
-2. Let Cloudflare provision SSL
-3. **Remove the Netlify records** — both names are currently `CNAME` →
-   `nervous-perlman-239168.netlify.app` (`proxied=false`). They will otherwise
-   keep taking precedence and the site will keep serving from Netlify.
-4. Disconnect the site in Netlify so it stops auto-deploying.
+Rollback snapshot of the pre-cutover DNS: `~/sf_dns_rollback.json`.
 
-Do the steps in that order to avoid downtime.
+> The apex CNAME is proxied, so Cloudflare now applies edge features the
+> DNS-only setup never used. Notably **Email Address Obfuscation** rewrites
+> `mailto:` links into `/cdn-cgi/l/email-protection#...` and injects
+> `email-decode.min.js`. Harmless in a browser (JS restores them) but the raw
+> HTML no longer contains the literal address — disable under
+> Scrape Shield if that matters.
+
+> Cache purge needs **Zone → Cache Purge → Purge**, which this token lacks.
+> Not a problem: the HTML carries `max-age=0, must-revalidate`.
+
+### Worker routes need a separate permission
+
+`strataflow.work/api/*` → Worker would let the form post same-origin. Adding
+`routes` to `wrangler.toml` **failed** with `No access to the specified
+resource` (needs **Zone → Workers Routes → Edit**), and worse, the mere presence
+of `routes` made wrangler deploy to routes *instead of* `workers.dev` — leaving
+the Worker unreachable (HTTP 404, Cloudflare error 1042) and silently breaking
+the form. Reverted; `routes` must not be re-added without that permission.
+
+The form therefore calls the `workers.dev` URL directly, which works.
 
 ---
 
