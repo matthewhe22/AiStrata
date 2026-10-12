@@ -234,6 +234,10 @@
 
         <h1 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 24px;">My Account</h1>
 
+        <div id="authError" class="hidden" style="margin-bottom:24px; padding:16px 20px; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:12px; color:#EF4444; font-size:0.9rem;">
+            We could not load your account right now. Please refresh or sign in again.
+        </div>
+
         <div id="noSubscription" class="card hidden" style="margin-bottom: 24px;">
             <h2>No Active Subscription</h2>
             <p style="color: #94A3B8; margin-bottom: 16px;">You don't have an active plan yet.</p>
@@ -288,16 +292,37 @@
     </div>
 
     <script>
-        fetch('/api/auth-me')
-            .then((res) => (res.ok ? res.json() : Promise.reject()))
+        // Bounce guard: if /api/auth-me is unavailable (e.g. it falls through to
+        // an HTML catch-all and returns a non-JSON 200), we must NOT bounce to
+        // /login.html more than once — the login page would send us right back
+        // here and the two pages would loop forever. Instead, show an error.
+        function authFailed(reason) {
+            var banner = document.getElementById('authError');
+            if (banner) {
+                banner.textContent = 'We could not load your account right now. Please refresh or sign in again.';
+                banner.classList.remove('hidden');
+                banner.style.display = 'block';
+            }
+            if (!sessionStorage.getItem('sf_auth_bounced')) {
+                sessionStorage.setItem('sf_auth_bounced', '1');
+                window.location.href = '/login.html';
+            }
+        }
+
+        fetch('/api/auth-me', { headers: { Accept: 'application/json' }, credentials: 'same-origin' })
+            .then((res) => {
+                const ct = res.headers.get('content-type') || '';
+                if (!res.ok || ct.indexOf('application/json') === -1) return Promise.reject(new Error('bad response'));
+                return res.json();
+            })
             .then(({ user }) => {
+                if (!user) return Promise.reject(new Error('no user'));
+                sessionStorage.removeItem('sf_auth_bounced');
                 document.getElementById('userName').textContent = user.fullName || user.email;
                 document.getElementById('userEmail').textContent = user.email;
                 loadAccountStatus();
             })
-            .catch(() => {
-                window.location.href = '/login.html';
-            });
+            .catch(() => authFailed('auth-me failed'));
 
         function loadAccountStatus() {
             fetch('/api/account-status')
@@ -329,9 +354,9 @@
 
         function handleLogout() {
             if (confirm('Are you sure you want to sign out?')) {
-                fetch('/api/auth-logout', { method: 'POST' }).finally(() => {
-                    window.location.href = '/login.html';
-                });
+                sessionStorage.removeItem('sf_auth_bounced');
+                fetch('/api/auth-logout', { method: 'POST', credentials: 'same-origin' })
+                    .finally(() => { window.location.href = '/login'; });
             }
         }
 

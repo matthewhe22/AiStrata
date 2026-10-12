@@ -266,9 +266,23 @@
         }
 
         // Already signed in? Skip straight to the account portal.
-        fetch('/api/auth-me').then((res) => {
-            if (res.ok) redirectAfterAuth();
-        });
+        //
+        // Guard: we must only redirect when the API returns a real user object.
+        // Checking `res.ok` alone is unsafe — ANY HTTP 200 counts as "ok",
+        // including an HTML fallback page. When /api/* is not served by a
+        // function (e.g. it falls through to a catch-all), res.ok is true and
+        // this page redirects to the portal, which then fails its own auth
+        // check and bounces straight back here -> infinite refresh loop.
+        fetch('/api/auth-me', { headers: { Accept: 'application/json' }, credentials: 'same-origin' })
+            .then((res) => {
+                const ct = res.headers.get('content-type') || '';
+                if (!res.ok || ct.indexOf('application/json') === -1) return null;
+                return res.json().catch(() => null);
+            })
+            .then((data) => {
+                if (data && data.user) redirectAfterAuth();
+            })
+            .catch(() => { /* not signed in — stay on the login form */ });
     </script>
 </body>
 </html>
