@@ -5,6 +5,10 @@ export const onRequestPost = () => json({ success: true }, 200, {
   'Set-Cookie': clearSessionCookie(),
 });
 
+// Without a GET handler, Pages falls through to the static-asset lookup and
+// returns the 404 page instead of a method error. Be explicit.
+export const onRequestGet = () => json({ error: 'Method Not Allowed' }, 405);
+
 export const onRequestOptions = () => new Response(null, {
   status: 204,
   headers: {
