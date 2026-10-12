@@ -106,3 +106,7 @@ export const onRequestPost = async ({ request, env }) => {
     return json({ error: error.message }, 500);
   }
 };
+
+// Stripe calls this by POST only; be explicit so GET returns a method error
+// rather than falling through to the static-asset 404 page.
+export const onRequestGet = () => json({ error: 'Method Not Allowed' }, 405);

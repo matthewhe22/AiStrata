@@ -37,3 +37,7 @@ export const onRequestOptions = () => new Response(null, {
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
   },
 });
+
+// Without an explicit GET handler, Pages falls through to the static-asset
+// lookup and serves the 404 page instead of a method error.
+export const onRequestGet = () => json({ error: 'Method Not Allowed' }, 405);
